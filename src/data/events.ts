@@ -1,0 +1,46 @@
+import { FightEvent } from '../types/event';
+
+export const upcomingEvents: FightEvent[] = [
+  {
+    id: '1',
+    title: 'Noche de Titanes',
+    date: '2025-12-15',
+    location: 'Madrid Arena, Madrid',
+    mainFight: 'García vs. Martínez',
+    imageUrl: 'https://images.pexels.com/photos/163403/box-sport-men-training-163403.jpeg',
+    price: 45,
+    category: 'BOXEO',
+    isHighlight: true,
+  },
+  {
+    id: '2',
+    title: 'Warrior Fight Night',
+    date: '2025-12-20',
+    location: 'Palau Sant Jordi, Barcelona',
+    mainFight: 'Silva vs. López',
+    imageUrl: 'https://images.pexels.com/photos/598686/pexels-photo-598686.jpeg',
+    price: 55,
+    category: 'MMA',
+    isHighlight: true,
+  },
+  {
+    id: '3',
+    title: 'Kickboxing Xtreme',
+    date: '2025-12-28',
+    location: 'WiZink Center, Madrid',
+    mainFight: 'Rodríguez vs. Fernández',
+    imageUrl: 'https://images.pexels.com/photos/598688/pexels-photo-598688.jpeg',
+    price: 40,
+    category: 'KICKBOXING',
+  },
+  {
+    id: '4',
+    title: 'Muay Thai Warriors',
+    date: '2026-01-10',
+    location: 'Bilbao Arena, Bilbao',
+    mainFight: 'Pérez vs. Santos',
+    imageUrl: 'https://images.pexels.com/photos/7045852/pexels-photo-7045852.jpeg',
+    price: 38,
+    category: 'MUAY_THAI',
+  },
+];
