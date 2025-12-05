@@ -40,9 +40,9 @@ export function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
-              <a href="/#eventos" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+              <Link to="/eventos" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
                 Eventos
-              </a>
+              </Link>
               <a href="/#beneficios" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
                 Por qué nosotros
               </a>

@@ -51,7 +51,10 @@ Password: Demo123!
 
 - **Catálogo de Eventos**
   - Landing page moderna y responsive
-  - Listado de eventos por categoría
+  - Página dedicada de eventos con sistema de búsqueda avanzada
+  - Filtros por ciudad y categoría de deporte
+  - Buscador de eventos en tiempo real
+  - Listado de eventos destacados y regulares
   - Información detallada de cada evento
   - Diseño optimizado para conversión
 
@@ -92,11 +95,13 @@ src/
 │   ├── Hero.tsx
 │   ├── EventsSection.tsx
 │   ├── EventCard.tsx
+│   ├── SearchBar.tsx
 │   ├── BenefitsSection.tsx
 │   ├── SecuritySection.tsx
 │   └── Footer.tsx
 ├── pages/                 # Páginas de la aplicación
 │   ├── HomePage.tsx
+│   ├── EventsPage.tsx
 │   ├── ProfilePage.tsx
 │   └── SettingsPage.tsx
 ├── data/                  # Datos estáticos
@@ -134,6 +139,7 @@ Para información detallada sobre arquitectura, API, guías de desarrollo y migr
 
 ```
 /           → Landing page (pública)
+/eventos    → Catálogo completo de eventos con filtros (pública)
 /profile    → Perfil de usuario (protegida, requiere login)
 /settings   → Configuración de usuario (protegida, requiere login)
 ```
@@ -199,7 +205,7 @@ localStorage.clear()
 
 ---
 
-**Versión**: 1.0.0 (MOCK)  
+**Versión**: 1.1.0 (MOCK)  
 **Última actualización**: Diciembre 4, 2025  
 **Estado**: ✅ Sistema MOCK completamente funcional
 

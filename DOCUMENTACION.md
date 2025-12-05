@@ -7,7 +7,7 @@
 3. [Gestión de Perfil de Usuario](#3-gestión-de-perfil-de-usuario)
 4. [Sistema de Configuración](#4-sistema-de-configuración)
 5. [Upload de Avatar](#5-upload-de-avatar)
-6. [Catálogo de Eventos](#6-catálogo-de-eventos)
+6. [Módulo de Eventos](#6-módulo-de-eventos)
 7. [Guía de Desarrollo](#7-guía-de-desarrollo)
 8. [API Reference](#8-api-reference)
 9. [Migración a Producción](#9-migración-a-producción)
@@ -86,13 +86,15 @@ project/
 │   ├── components/                        # Componentes globales
 │   │   ├── Header.tsx                    # Navegación principal
 │   │   ├── Hero.tsx                      # Sección hero
-│   │   ├── EventsSection.tsx             # Lista de eventos
+│   │   ├── EventsSection.tsx             # Sección de eventos destacados
 │   │   ├── EventCard.tsx                 # Tarjeta de evento
+│   │   ├── SearchBar.tsx                 # Barra de búsqueda de eventos
 │   │   ├── BenefitsSection.tsx           # Beneficios
 │   │   ├── SecuritySection.tsx           # Seguridad
 │   │   └── Footer.tsx                    # Pie de página
 │   ├── pages/                            # Páginas
 │   │   ├── HomePage.tsx                  # Landing page
+│   │   ├── EventsPage.tsx                # Catálogo completo de eventos
 │   │   ├── ProfilePage.tsx               # Perfil de usuario
 │   │   └── SettingsPage.tsx              # Configuración
 │   ├── data/
@@ -673,30 +675,143 @@ function ProfilePage() {
 
 ---
 
-## 6. Catálogo de Eventos
+## 6. Módulo de Eventos
 
-### EventsSection
+### EventsPage (`/eventos`)
 
-**Funcionalidad:** Muestra el catálogo completo de eventos organizados en dos categorías.
+**Funcionalidad:** Página dedicada que muestra el catálogo completo de eventos con sistema de búsqueda y filtrado avanzado.
 
-#### Organización
+#### Características Principales
 
-**Destacados:**
-- Eventos marcados con `isHighlight: true`
-- Grid de 2 columnas en desktop
-- Posición prioritaria
+**1. Sistema de Búsqueda y Filtrado:**
+- Filtro por ciudad (Madrid, Barcelona, Valencia, etc.)
+- Filtro por categoría de deporte (MMA, Boxeo, Muay Thai, etc.)
+- Búsqueda en tiempo real por nombre, pelea o ubicación
+- Contador de resultados
+- Botón para limpiar filtros
+- Estado "Sin resultados" con mensaje amigable
 
-**Más Eventos:**
-- Resto de eventos
-- Grid de 3 columnas en desktop
+**2. Organización de Eventos:**
+- **Eventos Destacados**: Grid de 2 columnas en desktop
+- **Eventos Regulares**: Grid de 3 columnas en desktop
+- Separación visual clara entre ambas categorías
+
+**3. Lógica de Filtrado:**
+```typescript
+// Filtrado inteligente que combina múltiples criterios:
+- Ciudad: Busca coincidencias en la ubicación del evento
+- Categoría: Mapeo de nombres legibles a códigos internos
+- Búsqueda: Busca en título, pelea principal y ubicación
+```
 
 #### Responsive
 
-| Dispositivo | Destacados | Más Eventos |
-|-------------|------------|-------------|
-| Mobile | 1 columna | 1 columna |
-| Tablet | 2 columnas | 2 columnas |
-| Desktop | 2 columnas | 3 columnas |
+| Dispositivo | Destacados | Regulares | SearchBar |
+|-------------|------------|-----------|-----------|
+| Mobile | 1 columna | 1 columna | Vertical (3 filas) |
+| Tablet | 2 columnas | 2 columnas | Vertical (3 filas) |
+| Desktop | 2 columnas | 3 columnas | Horizontal (3 columnas) |
+
+### SearchBar Component
+
+**Funcionalidad:** Componente reutilizable de búsqueda con tres filtros independientes.
+
+#### Características
+
+**1. Dropdown de Ciudad:**
+- Selector desplegable con overlay
+- Ciudades principales de España
+- Opción "Todas las ciudades" por defecto
+- Icono de ubicación (MapPin)
+- Estado activo visual
+
+**2. Dropdown de Categoría:**
+- Selector desplegable con overlay
+- Todas las categorías de deportes de contacto
+- Opción "Todas las categorías" por defecto
+- Icono de estrella
+- Estado activo visual
+
+**3. Campo de Búsqueda:**
+- Input de texto libre
+- Icono de búsqueda
+- Placeholder descriptivo
+- Búsqueda en tiempo real sin necesidad de botón
+- Focus state con border rojo
+
+#### Props del Componente
+
+```typescript
+interface SearchBarProps {
+  onSearch?: (filters: SearchFilters) => void;
+}
+
+export interface SearchFilters {
+  city: string;
+  category: string;
+  searchTerm: string;
+}
+```
+
+#### Ciudades Disponibles
+
+```typescript
+const cities = [
+  'Todas las ciudades',
+  'Madrid',
+  'Barcelona',
+  'Valencia',
+  'Sevilla',
+  'Bilbao',
+  'Málaga',
+  'Zaragoza',
+];
+```
+
+#### Categorías Disponibles
+
+```typescript
+const categories = [
+  'Todas las categorías',
+  'MMA',
+  'Boxeo',
+  'Muay Thai',
+  'Kickboxing',
+  'BJJ',
+  'Wrestling',
+];
+```
+
+#### Ejemplo de Uso
+
+```typescript
+import { SearchBar, SearchFilters } from '../components/SearchBar';
+
+function MyComponent() {
+  const handleSearch = (filters: SearchFilters) => {
+    console.log('Filters:', filters);
+    // Aplicar filtros a los eventos
+  };
+
+  return <SearchBar onSearch={handleSearch} />;
+}
+```
+
+### EventsSection (Componente Home)
+
+**Funcionalidad:** Muestra solo los eventos destacados en la landing page con un botón para ver todos.
+
+#### Cambios vs Versión Anterior
+
+**Antes:**
+- Mostraba eventos destacados Y más eventos
+- Dos grids separados
+- Sin call-to-action
+
+**Ahora:**
+- Solo muestra eventos destacados
+- Botón "Ver Todos los Eventos" que redirige a `/eventos`
+- Diseño más limpio y enfocado
 
 ### EventCard
 
@@ -920,12 +1035,14 @@ export function MyComponent({ }: MyComponentProps) {
 // src/pages/NewPage.tsx
 export function NewPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white pt-20">
       <h1>Nueva Página</h1>
     </div>
   );
 }
 ```
+
+**Nota:** Siempre agregar `pt-20` para compensar el header fixed.
 
 2. **Agregar la ruta en App.tsx:**
 ```typescript
@@ -947,8 +1064,14 @@ import { NewPage } from './pages/NewPage';
 
 3. **Agregar navegación en Header:**
 ```typescript
-<a href="/new" className="text-gray-300 hover:text-white">
+// Para rutas internas (usar Link de react-router):
+<Link to="/new" className="text-gray-300 hover:text-white">
   Nueva Página
+</Link>
+
+// Para anclas dentro de la misma página:
+<a href="#seccion" className="text-gray-300 hover:text-white">
+  Sección
 </a>
 ```
 
@@ -1842,9 +1965,9 @@ Para más información o ayuda específica, consulta las secciones relevantes de
 
 ---
 
-**Versión**: 1.0.0 (MOCK)  
+**Versión**: 1.1.0 (MOCK)  
 **Última actualización**: Diciembre 4, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional
+**Estado**: ✅ Sistema MOCK completamente funcional + Módulo de Eventos
 
 ---
 

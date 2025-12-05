@@ -4,6 +4,58 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.1.0] - Diciembre 4, 2025
+
+### 🎯 Módulo de Eventos
+
+#### ✅ Implementado
+- **Página de Eventos** (`/eventos`) - Nueva página pública dedicada al catálogo de eventos
+- **Componente SearchBar**:
+  - Filtro dropdown por ciudad (8 ciudades disponibles)
+  - Filtro dropdown por categoría de deporte (6 categorías)
+  - Campo de búsqueda en tiempo real
+  - Interfaz responsive (vertical en mobile, horizontal en desktop)
+  - Estados activos visuales para cada filtro
+  - Overlays de cierre al hacer clic fuera
+
+- **Sistema de Filtrado Avanzado**:
+  - Filtrado combinado por ciudad, categoría y término de búsqueda
+  - Búsqueda en título, pelea principal y ubicación
+  - Contador de resultados en tiempo real
+  - Botón para limpiar todos los filtros
+  - Estado "Sin resultados" con mensaje amigable
+
+- **Organización de Eventos**:
+  - Eventos destacados en grid de 2 columnas
+  - Eventos regulares en grid de 3 columnas
+  - Responsive: 1→2→3 columnas según dispositivo
+  - Separación visual clara entre categorías
+
+#### 📄 Archivos Creados
+```
+src/
+├── components/
+│   └── SearchBar.tsx                 (150 líneas)
+└── pages/
+    └── EventsPage.tsx                (145 líneas)
+```
+
+**Total:** ~295 líneas de código
+
+#### 🔄 Archivos Modificados
+- `src/components/EventsSection.tsx` - Simplificado para mostrar solo destacados
+- `src/components/Header.tsx` - Link de "Eventos" ahora navega a `/eventos`
+- `src/App.tsx` - Agregada ruta `/eventos`
+
+#### ✨ Mejoras de UX
+- Landing page más limpia (solo destacados + CTA)
+- Página dedicada de eventos con búsqueda potente
+- Navegación fluida entre páginas
+- Feedback visual inmediato al filtrar
+- Diseño consistente con el resto de la aplicación
+
+---
+
 ## [1.0.0] - Diciembre 4, 2025
 
 ### 📚 Documentación
@@ -393,12 +445,20 @@ src/
 - [ ] Error boundaries
 - [ ] Tooltips informativos
 - [ ] Tours guiados para nuevos usuarios
+- [ ] Paginación en página de eventos
+- [ ] Ordenamiento de eventos (fecha, precio, popularidad)
 
 ---
 
 ## Notas de Versión
 
 ### Versiones
+
+- **1.1.0 (MOCK)** - Módulo de Eventos + Mejoras
+  - Página dedicada de eventos con filtros avanzados
+  - Sistema de búsqueda en tiempo real
+  - Filtros por ciudad y categoría
+  - Landing page optimizada
 
 - **1.0.0 (MOCK)** - Sistema completo funcional con MOCK
   - Autenticación completa
@@ -424,5 +484,6 @@ src/
 ---
 
 **Mantenido por:** Equipo Strike & Ground  
-**Última actualización:** Diciembre 4, 2025
+**Última actualización:** Diciembre 4, 2025  
+**Versión actual:** 1.1.0 (MOCK)
 

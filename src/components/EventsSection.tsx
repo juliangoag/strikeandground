@@ -1,9 +1,9 @@
+import { Link } from 'react-router-dom';
 import { EventCard } from './EventCard';
 import { upcomingEvents } from '../data/events';
 
 export function EventsSection() {
   const highlightedEvents = upcomingEvents.filter(event => event.isHighlight);
-  const otherEvents = upcomingEvents.filter(event => !event.isHighlight);
 
   return (
     <section id="eventos" className="py-20 bg-black">
@@ -30,16 +30,15 @@ export function EventsSection() {
           </div>
         )}
 
-        {otherEvents.length > 0 && (
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-6">Más eventos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {otherEvents.map(event => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Botón para ver todos los eventos */}
+        <div className="text-center mt-8">
+          <Link
+            to="/eventos"
+            className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg transition-colors font-semibold text-lg"
+          >
+            Ver Todos los Eventos
+          </Link>
+        </div>
       </div>
     </section>
   );
