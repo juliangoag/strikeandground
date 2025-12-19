@@ -4,6 +4,168 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.3.1] - Diciembre 19, 2025
+
+### 🐛 Correcciones y Limpieza
+
+#### ✅ Implementado
+- **Corrección de Tipos TypeScript**
+  - Agregada categoría 'WRESTLING' al tipo `FightEvent` en `app/types/event.ts`
+  - Resuelve inconsistencia entre tipos y componentes que ya usaban WRESTLING
+  - Ahora las 6 categorías están correctamente tipadas: MMA, BOXEO, MUAY_THAI, KICKBOXING, BJJ, WRESTLING
+
+- **Limpieza del Proyecto**
+  - Eliminada carpeta `dist/` (build de producción antiguo)
+  - Se regenera automáticamente con `npm run build`
+  - Reduce tamaño del repositorio
+
+- **Mejora de SEO y Redes Sociales**
+  - Actualizadas meta tags en `index.html`
+  - Título más descriptivo: "Strike & Ground - Entradas para eventos de deportes de contacto"
+  - Meta description agregada para SEO
+  - Tags de Open Graph actualizadas con información correcta
+  - Tags de Twitter Card mejoradas
+  - Eliminadas referencias a imágenes externas incorrectas (bolt.new)
+
+#### 🔄 Archivos Modificados
+- `app/types/event.ts` - Tipo FightEvent actualizado con categoría WRESTLING
+- `index.html` - Meta tags mejoradas para SEO y redes sociales
+- `CHANGELOG.md` - Documentación de cambios
+
+#### 📊 Resultado
+- ✅ 0 inconsistencias de tipos TypeScript
+- ✅ 0 archivos residuales
+- ✅ Proyecto 100% limpio y optimizado
+- ✅ Meta tags correctas para compartir en redes sociales
+
+---
+
+## [1.3.0] - Diciembre 19, 2025
+
+### 📁 Reestructuración del Proyecto
+
+#### ✅ Implementado
+- **Carpeta raíz renombrada** de `src/` a `app/`
+  - Toda la aplicación ahora reside en la carpeta `app/` en lugar de `src/`
+  - Mejor organización siguiendo convenciones modernas de desarrollo
+  
+- **Rutas protegidas organizadas**
+  - Nueva carpeta `app/pages/(protected)/` para páginas que requieren autenticación
+  - Páginas movidas a la carpeta protegida:
+    - `ProfilePage.tsx` - Perfil de usuario
+    - `SettingsPage.tsx` - Configuración de usuario
+  - Convención de nomenclatura clara: carpetas entre paréntesis `(protected)` indican grupo de rutas
+
+#### 🔄 Archivos Modificados
+- `index.html` - Script de entrada actualizado de `/src/main.tsx` a `/app/main.tsx`
+- `tsconfig.app.json` - Configuración de include actualizada de `["src"]` a `["app"]`
+- `tailwind.config.js` - Configuración de content actualizada de `./src/**/*` a `./app/**/*`
+- `app/App.tsx` - Imports actualizados para reflejar nueva ubicación de páginas protegidas:
+  - `./pages/ProfilePage` → `./pages/(protected)/ProfilePage`
+  - `./pages/SettingsPage` → `./pages/(protected)/SettingsPage`
+- `app/pages/(protected)/ProfilePage.tsx` - Imports corregidos con rutas relativas `../../`
+- `app/pages/(protected)/SettingsPage.tsx` - Imports corregidos con rutas relativas `../../`
+
+#### 📚 Documentación Actualizada
+- `README.md` - Estructura del proyecto actualizada con carpeta `app/` y `(protected)/`
+- `DOCUMENTACION.md` - Referencias a rutas actualizadas en:
+  - Estructura de archivos detallada
+  - Guías de desarrollo
+  - Ejemplos de código
+  - FAQs y solución de problemas
+- `CHANGELOG.md` - Nueva entrada para documentar los cambios
+
+#### ✨ Mejoras de Organización
+- Separación clara entre rutas públicas y protegidas
+- Nomenclatura más descriptiva y consistente
+- Estructura más escalable para futuras expansiones
+- Mejor legibilidad del código con carpetas organizadas por tipo de acceso
+
+#### 📊 Estadísticas
+**Archivos reorganizados:**
+- Carpeta principal: `src/` → `app/`
+- Páginas protegidas: movidas a `(protected)/` (2 archivos)
+- Archivos de configuración actualizados: 3
+- Documentación actualizada: 3 archivos
+
+---
+
+## [1.2.0] - Diciembre 18, 2025
+
+### 📄 Módulo de Detalles de Eventos
+
+#### ✅ Implementado
+- **Página de Detalles de Evento** (`/eventos/:id/details`) - Nueva página dinámica para cada evento
+- **Hero Section con Imagen Grande**:
+  - Imagen destacada a pantalla completa
+  - Overlay con gradiente oscuro
+  - Badge de categoría del evento
+  - Badge de evento destacado (si aplica)
+  - Título y combate principal sobre la imagen
+  - Botón de navegación "Volver"
+
+- **Información Detallada del Evento**:
+  - Fecha y hora formateada (día de la semana completo)
+  - Ubicación con ícono
+  - Precio desde
+  - Duración estimada
+  - Descripción generada dinámicamente
+
+- **Cartelera de Peleas**:
+  - Combate principal destacado con borde rojo
+  - Co-main event (preparado para datos reales)
+  - Diseño visual jerárquico
+  - Información de rounds por pelea
+
+- **Sidebar de Compra de Entradas**:
+  - Tres tipos de entradas (General, VIP, Ringside)
+  - Precios calculados dinámicamente
+  - Botón de compra principal
+  - Información importante del evento
+  - Sticky sidebar en desktop
+
+- **Eventos Relacionados**:
+  - Grid de 3 eventos relacionados
+  - Navegación entre eventos
+  - Filtrado automático (excluye evento actual)
+  - Hover effects y animaciones
+
+- **Navegación Integrada**:
+  - EventCard ahora es clicable y redirige a detalles
+  - Botón "Ver Detalles" en lugar de "Comprar"
+  - Estructura de URL: `/eventos/[id]/details`
+  - Manejo de eventos no encontrados (404)
+
+#### 📄 Archivos Creados
+```
+src/
+└── pages/
+    └── EventDetailsPage.tsx          (330 líneas)
+```
+
+#### 🔄 Archivos Modificados
+- `src/App.tsx` - Agregada ruta dinámica `/eventos/:id/details`
+- `src/components/EventCard.tsx` - Agregado Link de react-router y navegación
+
+#### ✨ Mejoras de UX
+- Experiencia de navegación fluida entre listado y detalles
+- Información completa del evento en un solo lugar
+- Diseño responsive optimizado para móvil y desktop
+- Sidebar sticky para facilitar compra
+- Navegación entre eventos relacionados sin salir del flujo
+- Botón "Volver" inteligente (usa historial del navegador)
+- Estados de carga y error manejados
+- Animaciones suaves en transiciones
+
+#### 📊 Estadísticas
+**Código nuevo:**
+- Archivo nuevo: 1 página
+- Total líneas: ~330 líneas de código
+- Archivos modificados: 2
+- Iconos nuevos utilizados: 7 (ArrowLeft, Ticket, Users, etc.)
+
+---
+
 ## [1.1.0] - Diciembre 4, 2025
 
 ### 🎯 Módulo de Eventos
@@ -454,6 +616,17 @@ src/
 
 ### Versiones
 
+- **1.3.0 (MOCK)** - Reestructuración del Proyecto
+  - Carpeta raíz cambiada de `src/` a `app/`
+  - Rutas protegidas organizadas en carpeta `(protected)/`
+  - Configuraciones actualizadas
+  - Documentación completa actualizada
+
+- **1.2.0 (MOCK)** - Módulo de Detalles de Eventos
+  - Página completa de detalles por evento
+  - Sistema de compra de entradas
+  - Eventos relacionados
+
 - **1.1.0 (MOCK)** - Módulo de Eventos + Mejoras
   - Página dedicada de eventos con filtros avanzados
   - Sistema de búsqueda en tiempo real
@@ -484,6 +657,6 @@ src/
 ---
 
 **Mantenido por:** Equipo Strike & Ground  
-**Última actualización:** Diciembre 4, 2025  
-**Versión actual:** 1.1.0 (MOCK)
+**Última actualización:** Diciembre 19, 2025  
+**Versión actual:** 1.3.0 (MOCK)
 

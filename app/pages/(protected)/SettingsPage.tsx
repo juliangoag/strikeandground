@@ -1,8 +1,8 @@
 // Página de Configuración de Usuario
 import { useState } from 'react';
-import { useAuth } from '../auth/context/AuthContext';
-import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
+import { useAuth } from '../../auth/context/AuthContext';
+import { Header } from '../../components/Header';
+import { Footer } from '../../components/Footer';
 import { 
   Lock, 
   Bell, 

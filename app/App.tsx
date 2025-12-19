@@ -5,8 +5,9 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { SettingsPage } from './pages/SettingsPage';
+import { EventDetailsPage } from './pages/EventDetailsPage';
+import { ProfilePage } from './pages/(protected)/ProfilePage';
+import { SettingsPage } from './pages/(protected)/SettingsPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/eventos" element={<EventsPage />} />
+            <Route path="/eventos/:id/details" element={<EventDetailsPage />} />
             <Route
               path="/profile"
               element={

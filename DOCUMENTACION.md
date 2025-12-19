@@ -8,6 +8,9 @@
 4. [Sistema de Configuración](#4-sistema-de-configuración)
 5. [Upload de Avatar](#5-upload-de-avatar)
 6. [Módulo de Eventos](#6-módulo-de-eventos)
+   - [EventsPage - Catálogo](#eventspage)
+   - [EventDetailsPage - Detalles](#eventdetailspage)
+   - [EventCard - Tarjetas](#eventcard)
 7. [Guía de Desarrollo](#7-guía-de-desarrollo)
 8. [API Reference](#8-api-reference)
 9. [Migración a Producción](#9-migración-a-producción)
@@ -68,7 +71,7 @@ Deploy:
 
 ```
 project/
-├── src/
+├── app/                                  # Carpeta raíz de la aplicación
 │   ├── auth/                              # Módulo de autenticación
 │   │   ├── components/
 │   │   │   ├── AuthModal.tsx             # Modal principal con tabs
@@ -93,10 +96,12 @@ project/
 │   │   ├── SecuritySection.tsx           # Seguridad
 │   │   └── Footer.tsx                    # Pie de página
 │   ├── pages/                            # Páginas
+│   │   ├── (protected)/                  # Rutas protegidas (requieren autenticación)
+│   │   │   ├── ProfilePage.tsx           # Perfil de usuario
+│   │   │   └── SettingsPage.tsx          # Configuración
 │   │   ├── HomePage.tsx                  # Landing page
 │   │   ├── EventsPage.tsx                # Catálogo completo de eventos
-│   │   ├── ProfilePage.tsx               # Perfil de usuario
-│   │   └── SettingsPage.tsx              # Configuración
+│   │   └── EventDetailsPage.tsx          # Detalles de evento individual
 │   ├── data/
 │   │   └── events.ts                     # Datos de eventos
 │   ├── types/
@@ -824,7 +829,7 @@ function MyComponent() {
 - Fecha (formato español localizado)
 - Ubicación con icono
 - Precio desde (€)
-- Botón "Comprar"
+- Botón "Ver Detalles" (clicable, redirige a detalles)
 
 **Efectos visuales:**
 - Hover con escala 1.02
@@ -832,6 +837,11 @@ function MyComponent() {
 - Gradientes elegantes
 - Bordes que cambian de color
 - Transiciones suaves
+
+**Navegación:**
+- Toda la tarjeta es un link a `/eventos/:id/details`
+- Click en cualquier parte redirige a detalles del evento
+- Botón "Ver Detalles" mantiene consistencia visual
 
 **Categorías y colores:**
 
@@ -844,9 +854,99 @@ function MyComponent() {
 | BJJ | Verde (`green-500`) | BJJ |
 | WRESTLING | Naranja (`orange-500`) | Wrestling |
 
+### EventDetailsPage
+
+**Ruta:** `/eventos/:id/details`
+
+**Funcionalidad:** Página completa de detalles de un evento específico con toda la información y opciones de compra.
+
+#### Secciones Principales
+
+**1. Hero Section**
+- Imagen del evento a pantalla completa (400-500px altura)
+- Overlay oscuro con gradiente
+- Badge de categoría (esquina superior izquierda)
+- Badge de "DESTACADO" si aplica (esquina superior derecha)
+- Título del evento en grande (4xl a 6xl)
+- Combate principal en rojo
+- Botón "Volver" con navegación inteligente
+
+**2. Información del Evento**
+- Fecha y hora completa (incluye día de la semana)
+- Ubicación con ícono de mapa
+- Precio desde
+- Duración estimada (4 horas por defecto)
+- Descripción del evento generada dinámicamente
+
+**3. Cartelera de Peleas**
+- Combate principal con borde rojo destacado
+- Co-main event preparado para datos
+- Sistema jerárquico visual
+- Información de rounds
+
+**4. Sidebar de Compra**
+- Tres tipos de entradas:
+  - General (precio base)
+  - VIP (precio x2)
+  - Ringside (precio x3)
+- Botón de compra prominente
+- Información importante:
+  - Puertas abren 1 hora antes
+  - Mayores de 18 años
+  - No reembolsos
+  - Entradas digitales
+
+**5. Eventos Relacionados**
+- Grid de 3 eventos similares
+- Filtrado automático (excluye evento actual)
+- Navegación entre eventos
+
+#### Manejo de Errores
+
+Si el evento no existe (ID inválido):
+- Mensaje de error amigable
+- Botón para regresar a `/eventos`
+- Diseño consistente con el resto del sitio
+
+#### Características Técnicas
+
+```typescript
+// Parámetros de URL
+const { id } = useParams<{ id: string }>();
+
+// Búsqueda del evento
+const event = upcomingEvents.find((e) => e.id === id);
+
+// Formato de fecha avanzado
+const formattedDate = new Date(event.date).toLocaleDateString('es-ES', {
+  weekday: 'long',  // "lunes", "martes", etc.
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+```
+
+#### Responsive Design
+
+- **Mobile:** Stack vertical, sidebar debajo del contenido
+- **Desktop:** Layout de 3 columnas (2+1), sidebar sticky
+- Hero adaptable en altura
+- Eventos relacionados: 1→2→3 columnas
+
+#### Navegación
+
+```typescript
+// Botón volver usa historial del navegador
+const navigate = useNavigate();
+onClick={() => navigate(-1)}
+
+// Links a otros eventos
+to={`/eventos/${relatedEvent.id}/details`}
+```
+
 ### Cómo Agregar un Evento
 
-**Editar:** `src/data/events.ts`
+**Editar:** `app/data/events.ts`
 
 ```typescript
 export const upcomingEvents: FightEvent[] = [
@@ -1032,7 +1132,7 @@ export function MyComponent({ }: MyComponentProps) {
 
 1. **Crear el componente:**
 ```typescript
-// src/pages/NewPage.tsx
+// app/pages/NewPage.tsx (o app/pages/(protected)/NewPage.tsx si requiere autenticación)
 export function NewPage() {
   return (
     <div className="min-h-screen bg-black text-white pt-20">
@@ -1042,7 +1142,9 @@ export function NewPage() {
 }
 ```
 
-**Nota:** Siempre agregar `pt-20` para compensar el header fixed.
+**Nota:** 
+- Siempre agregar `pt-20` para compensar el header fixed.
+- Si la página requiere autenticación, créala en `app/pages/(protected)/` en lugar de `app/pages/`
 
 2. **Agregar la ruta en App.tsx:**
 ```typescript
@@ -1324,7 +1426,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 4. **Crear realAuthService.ts:**
 ```typescript
-// src/auth/services/realAuthService.ts
+// app/auth/services/realAuthService.ts
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -1415,7 +1517,7 @@ npm install firebase
 ```
 
 ```typescript
-// src/auth/services/firebaseAuthService.ts
+// app/auth/services/firebaseAuthService.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -1707,7 +1809,7 @@ Verificar que esté implementado correctamente.
 
 **Causa 1:** Tailwind no configurado
 
-**Solución:** Verificar `src/index.css`:
+**Solución:** Verificar `app/index.css`:
 ```css
 @tailwind base;
 @tailwind components;
@@ -1829,9 +1931,9 @@ interface User {
 
 #### ¿Cómo agrego más campos al perfil?
 
-1. Actualizar tipo `User` en `auth.types.ts`
-2. Actualizar `mockAuthService.register()`
-3. Actualizar `ProfilePage.tsx`
+1. Actualizar tipo `User` en `app/auth/types/auth.types.ts`
+2. Actualizar `app/auth/services/mockAuthService.ts` en el método `register()`
+3. Actualizar `app/pages/(protected)/ProfilePage.tsx`
 
 #### ¿Puedo cambiar el avatar automático?
 
@@ -1853,12 +1955,12 @@ className="bg-red-600" // Cambiar a bg-blue-600, etc.
 
 #### ¿Cómo agrego una nueva categoría de evento?
 
-1. **Actualizar tipo** en `src/types/event.ts`:
+1. **Actualizar tipo** en `app/types/event.ts`:
 ```typescript
 category: 'MMA' | 'BOXEO' | '...' | 'NUEVA_CATEGORIA';
 ```
 
-2. **Actualizar labels** en `EventCard.tsx`:
+2. **Actualizar labels** en `app/components/EventCard.tsx`:
 ```typescript
 const categoryLabels = {
   // ...
@@ -1965,9 +2067,9 @@ Para más información o ayuda específica, consulta las secciones relevantes de
 
 ---
 
-**Versión**: 1.1.0 (MOCK)  
-**Última actualización**: Diciembre 4, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional + Módulo de Eventos
+**Versión**: 1.3.0 (MOCK)  
+**Última actualización**: Diciembre 19, 2025  
+**Estado**: ✅ Sistema MOCK completamente funcional + Estructura Reorganizada
 
 ---
 

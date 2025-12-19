@@ -55,7 +55,10 @@ Password: Demo123!
   - Filtros por ciudad y categoría de deporte
   - Buscador de eventos en tiempo real
   - Listado de eventos destacados y regulares
-  - Información detallada de cada evento
+  - Página de detalles completa para cada evento
+  - Sistema de navegación fluida entre eventos
+  - Información detallada con cartelera de peleas
+  - Sidebar de compra de entradas con múltiples opciones
   - Diseño optimizado para conversión
 
 ### Pendiente ⚠️
@@ -84,7 +87,7 @@ Backend (MOCK):
 ## 📁 Estructura del Proyecto
 
 ```
-src/
+app/                       # Carpeta raíz de la aplicación
 ├── auth/                  # Módulo de autenticación
 │   ├── components/        # UI de auth (modals, forms, etc.)
 │   ├── context/           # AuthContext + useAuth hook
@@ -100,10 +103,12 @@ src/
 │   ├── SecuritySection.tsx
 │   └── Footer.tsx
 ├── pages/                 # Páginas de la aplicación
+│   ├── (protected)/       # Rutas protegidas (requieren autenticación)
+│   │   ├── ProfilePage.tsx
+│   │   └── SettingsPage.tsx
 │   ├── HomePage.tsx
 │   ├── EventsPage.tsx
-│   ├── ProfilePage.tsx
-│   └── SettingsPage.tsx
+│   └── EventDetailsPage.tsx
 ├── data/                  # Datos estáticos
 │   └── events.ts
 ├── types/                 # Definiciones TypeScript
@@ -138,10 +143,11 @@ Para información detallada sobre arquitectura, API, guías de desarrollo y migr
 ## 🎨 Rutas Disponibles
 
 ```
-/           → Landing page (pública)
-/eventos    → Catálogo completo de eventos con filtros (pública)
-/profile    → Perfil de usuario (protegida, requiere login)
-/settings   → Configuración de usuario (protegida, requiere login)
+/                      → Landing page (pública)
+/eventos               → Catálogo completo de eventos con filtros (pública)
+/eventos/:id/details   → Detalles completos de un evento específico (pública)
+/profile               → Perfil de usuario (protegida, requiere login)
+/settings              → Configuración de usuario (protegida, requiere login)
 ```
 
 ## ⚠️ Nota Importante: Sistema MOCK
@@ -205,8 +211,8 @@ localStorage.clear()
 
 ---
 
-**Versión**: 1.1.0 (MOCK)  
-**Última actualización**: Diciembre 4, 2025  
+**Versión**: 1.3.0 (MOCK)  
+**Última actualización**: Diciembre 19, 2025  
 **Estado**: ✅ Sistema MOCK completamente funcional
 
 ---

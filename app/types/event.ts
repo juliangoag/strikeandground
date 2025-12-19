@@ -6,6 +6,6 @@ export interface FightEvent {
   mainFight: string;
   imageUrl: string;
   price: number;
-  category: 'MMA' | 'BOXEO' | 'MUAY_THAI' | 'KICKBOXING' | 'BJJ';
+  category: 'MMA' | 'BOXEO' | 'MUAY_THAI' | 'KICKBOXING' | 'BJJ' | 'WRESTLING';
   isHighlight?: boolean;
 }
