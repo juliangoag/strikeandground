@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Calendar, MapPin, Tag, Clock, Users, ArrowLeft, Ticket } from 'lucide-react';
+import { Calendar, MapPin, Tag, Clock, Users, ArrowLeft, Ticket, ShoppingCart, CheckCircle } from 'lucide-react';
 import { upcomingEvents } from '../data/events';
+import { useCart } from '../context/CartContext';
 
 const categoryLabels = {
   MMA: 'MMA',
@@ -14,6 +16,11 @@ const categoryLabels = {
 export function EventDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addItem } = useCart();
+  
+  const [selectedTicket, setSelectedTicket] = useState<'general' | 'vip' | 'ringside'>('general');
+  const [quantity, setQuantity] = useState(1);
+  const [showToast, setShowToast] = useState(false);
 
   // Buscar el evento por ID
   const event = upcomingEvents.find((e) => e.id === id);
@@ -50,6 +57,23 @@ export function EventDetailsPage() {
     hour: '2-digit',
     minute: '2-digit',
   });
+
+  // Calcular precio según tipo de entrada
+  const ticketPrices = {
+    general: event.price,
+    vip: event.price * 2,
+    ringside: event.price * 3,
+  };
+
+  const currentPrice = ticketPrices[selectedTicket];
+  const totalPrice = currentPrice * quantity;
+
+  // Agregar al carrito
+  const handleAddToCart = () => {
+    addItem(event, selectedTicket, quantity);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   return (
     <div className="min-h-screen bg-black pt-20">
@@ -205,8 +229,13 @@ export function EventDetailsPage() {
               </h3>
 
               <div className="space-y-4 mb-6">
-                {/* Tipo de entrada */}
-                <div className="bg-black/50 rounded-lg p-4 border border-gray-700 hover:border-red-500 transition-colors cursor-pointer">
+                {/* Tipo de entrada - General */}
+                <div 
+                  onClick={() => setSelectedTicket('general')}
+                  className={`bg-black/50 rounded-lg p-4 border-2 transition-all cursor-pointer ${
+                    selectedTicket === 'general' ? 'border-red-500 bg-red-500/10' : 'border-gray-700 hover:border-red-500'
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="text-white font-semibold">General</p>
@@ -216,7 +245,13 @@ export function EventDetailsPage() {
                   </div>
                 </div>
 
-                <div className="bg-black/50 rounded-lg p-4 border border-gray-700 hover:border-red-500 transition-colors cursor-pointer">
+                {/* Tipo de entrada - VIP */}
+                <div 
+                  onClick={() => setSelectedTicket('vip')}
+                  className={`bg-black/50 rounded-lg p-4 border-2 transition-all cursor-pointer ${
+                    selectedTicket === 'vip' ? 'border-red-500 bg-red-500/10' : 'border-gray-700 hover:border-red-500'
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="text-white font-semibold">VIP</p>
@@ -226,7 +261,13 @@ export function EventDetailsPage() {
                   </div>
                 </div>
 
-                <div className="bg-black/50 rounded-lg p-4 border border-gray-700 hover:border-red-500 transition-colors cursor-pointer">
+                {/* Tipo de entrada - Ringside */}
+                <div 
+                  onClick={() => setSelectedTicket('ringside')}
+                  className={`bg-black/50 rounded-lg p-4 border-2 transition-all cursor-pointer ${
+                    selectedTicket === 'ringside' ? 'border-red-500 bg-red-500/10' : 'border-gray-700 hover:border-red-500'
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="text-white font-semibold">Ringside</p>
@@ -237,8 +278,46 @@ export function EventDetailsPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg transition-colors font-bold text-lg mb-3">
-                Comprar Ahora
+              {/* Selector de cantidad */}
+              <div className="mb-6">
+                <label className="block text-white font-semibold mb-2">Cantidad</label>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-20 text-center bg-black border border-gray-700 text-white rounded-lg py-2"
+                    min="1"
+                  />
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-10 h-10 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Total */}
+              <div className="mb-6 p-4 bg-black/50 rounded-lg border border-gray-700">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Total</span>
+                  <span className="text-2xl font-bold text-red-500">{totalPrice}€</span>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleAddToCart}
+                className="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg transition-colors font-bold text-lg mb-3 flex items-center justify-center gap-2"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Agregar al Carrito
               </button>
 
               <p className="text-gray-400 text-xs text-center">
@@ -300,6 +379,25 @@ export function EventDetailsPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast de confirmación */}
+      {showToast && (
+        <div className="fixed bottom-8 right-8 z-50 animate-slide-up">
+          <div className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
+            <CheckCircle className="w-6 h-6" />
+            <div className="flex-1">
+              <p className="font-semibold">¡Agregado al carrito!</p>
+              <p className="text-sm text-green-100">{quantity} entrada(s) de {selectedTicket}</p>
+            </div>
+            <Link
+              to="/checkout"
+              className="bg-white text-green-600 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors"
+            >
+              Ver Carrito
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

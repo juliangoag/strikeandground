@@ -3,6 +3,11 @@
 ## 📑 Índice
 
 1. [Arquitectura del Proyecto](#1-arquitectura-del-proyecto)
+   - [Stack Tecnológico](#stack-tecnológico-completo)
+   - [Flujo de Datos](#flujo-de-datos)
+   - [Estructura de Archivos](#estructura-de-archivos-completa)
+   - [Modelo de Datos](#modelo-de-datos)
+   - [Estadísticas del Proyecto](#estadísticas-del-proyecto)
 2. [Módulo de Autenticación](#2-módulo-de-autenticación)
 3. [Gestión de Perfil de Usuario](#3-gestión-de-perfil-de-usuario)
 4. [Sistema de Configuración](#4-sistema-de-configuración)
@@ -11,11 +16,16 @@
    - [EventsPage - Catálogo](#eventspage)
    - [EventDetailsPage - Detalles](#eventdetailspage)
    - [EventCard - Tarjetas](#eventcard)
-7. [Guía de Desarrollo](#7-guía-de-desarrollo)
-8. [API Reference](#8-api-reference)
-9. [Migración a Producción](#9-migración-a-producción)
-10. [Solución de Problemas](#10-solución-de-problemas)
-11. [FAQ](#11-faq)
+7. [Módulo de Checkout](#7-módulo-de-checkout)
+   - [CartContext - Contexto del Carrito](#cartcontext)
+   - [mockCheckoutService - Servicio de Órdenes](#mockcheckoutservice)
+   - [CheckoutPage - Página Principal](#checkoutpage)
+   - [Componentes del Checkout](#componentes-del-checkout)
+8. [Guía de Desarrollo](#8-guía-de-desarrollo)
+9. [API Reference](#9-api-reference)
+10. [Migración a Producción](#10-migración-a-producción)
+11. [Solución de Problemas](#11-solución-de-problemas)
+12. [FAQ](#12-faq)
 
 ---
 
@@ -67,57 +77,91 @@ Deploy:
 └─────────────────┘
 ```
 
-### Estructura de Archivos Detallada
+### Estructura de Archivos Completa
 
 ```
 project/
-├── app/                                  # Carpeta raíz de la aplicación
-│   ├── auth/                              # Módulo de autenticación
-│   │   ├── components/
-│   │   │   ├── AuthModal.tsx             # Modal principal con tabs
-│   │   │   ├── LoginForm.tsx             # Formulario de login
-│   │   │   ├── RegisterForm.tsx          # Formulario de registro
-│   │   │   ├── ForgotPasswordForm.tsx    # Recuperación de contraseña
-│   │   │   ├── ProtectedRoute.tsx        # HOC para rutas protegidas
-│   │   │   └── AvatarUploadModal.tsx     # Upload de foto de perfil
-│   │   ├── context/
-│   │   │   └── AuthContext.tsx           # Context + Provider + useAuth
-│   │   ├── services/
-│   │   │   └── mockAuthService.ts        # Lógica MOCK completa
-│   │   └── types/
-│   │       └── auth.types.ts             # Tipos TypeScript
-│   ├── components/                        # Componentes globales
-│   │   ├── Header.tsx                    # Navegación principal
-│   │   ├── Hero.tsx                      # Sección hero
-│   │   ├── EventsSection.tsx             # Sección de eventos destacados
-│   │   ├── EventCard.tsx                 # Tarjeta de evento
-│   │   ├── SearchBar.tsx                 # Barra de búsqueda de eventos
-│   │   ├── BenefitsSection.tsx           # Beneficios
-│   │   ├── SecuritySection.tsx           # Seguridad
-│   │   └── Footer.tsx                    # Pie de página
-│   ├── pages/                            # Páginas
-│   │   ├── (protected)/                  # Rutas protegidas (requieren autenticación)
-│   │   │   ├── ProfilePage.tsx           # Perfil de usuario
-│   │   │   └── SettingsPage.tsx          # Configuración
-│   │   ├── HomePage.tsx                  # Landing page
-│   │   ├── EventsPage.tsx                # Catálogo completo de eventos
-│   │   └── EventDetailsPage.tsx          # Detalles de evento individual
-│   ├── data/
-│   │   └── events.ts                     # Datos de eventos
-│   ├── types/
-│   │   └── event.ts                      # Tipos de eventos
-│   ├── App.tsx                           # Componente raíz + Router
-│   ├── main.tsx                          # Entry point
-│   └── index.css                         # Estilos globales
-├── public/                               # Assets estáticos
-├── dist/                                 # Build de producción
-├── README.md                             # Documentación principal
-├── DOCUMENTACION.md                      # Este archivo
-├── CHANGELOG.md                          # Historial de cambios
-├── package.json                          # Dependencias
-├── tsconfig.json                         # Config TypeScript
-├── tailwind.config.js                    # Config Tailwind
-└── vite.config.ts                        # Config Vite
+│
+├── 📂 app/                           # Código fuente de la aplicación
+│   ├── 📂 auth/                      # Módulo de autenticación
+│   │   ├── 📂 components/            # Componentes de autenticación
+│   │   │   ├── AuthModal.tsx         # Modal principal con tabs
+│   │   │   ├── LoginForm.tsx         # Formulario de login
+│   │   │   ├── RegisterForm.tsx      # Formulario de registro
+│   │   │   ├── ForgotPasswordForm.tsx # Recuperación de contraseña
+│   │   │   ├── ProtectedRoute.tsx    # HOC para rutas protegidas
+│   │   │   └── AvatarUploadModal.tsx # Upload de foto de perfil
+│   │   ├── 📂 context/
+│   │   │   └── AuthContext.tsx       # Context + Provider + useAuth
+│   │   ├── 📂 services/
+│   │   │   └── mockAuthService.ts    # Lógica MOCK completa
+│   │   └── 📂 types/
+│   │       └── auth.types.ts         # Tipos TypeScript
+│   │
+│   ├── 📂 components/                # Componentes globales
+│   │   ├── Header.tsx                # Navegación principal
+│   │   ├── Hero.tsx                  # Sección hero
+│   │   ├── EventsSection.tsx         # Sección de eventos destacados
+│   │   ├── EventCard.tsx             # Tarjeta de evento
+│   │   ├── SearchBar.tsx             # Barra de búsqueda de eventos
+│   │   ├── BenefitsSection.tsx       # Beneficios
+│   │   ├── SecuritySection.tsx       # Seguridad
+│   │   ├── Footer.tsx                # Pie de página
+│   │   ├── OrderSummary.tsx          # Resumen de orden (checkout)
+│   │   ├── PaymentMethodSelector.tsx # Selector de método de pago
+│   │   ├── PromoCodeInput.tsx        # Input de código promocional
+│   │   └── ShippingForm.tsx          # Formulario de información de envío
+│   │
+│   ├── 📂 context/                   # Contextos globales
+│   │   └── CartContext.tsx           # Context del carrito de compras
+│   │
+│   ├── 📂 pages/                     # Páginas de la aplicación
+│   │   ├── 📂 (protected)/           # Rutas protegidas (requieren auth)
+│   │   │   ├── ProfilePage.tsx       # Perfil de usuario
+│   │   │   └── SettingsPage.tsx      # Configuración de usuario
+│   │   ├── HomePage.tsx              # Landing page
+│   │   ├── EventsPage.tsx            # Catálogo completo de eventos
+│   │   ├── EventDetailsPage.tsx      # Detalles de evento individual
+│   │   └── CheckoutPage.tsx          # Proceso de checkout
+│   │
+│   ├── 📂 services/                  # Servicios y lógica de negocio
+│   │   └── mockCheckoutService.ts    # Servicio MOCK de órdenes
+│   │
+│   ├── 📂 data/                      # Datos estáticos
+│   │   ├── events.ts                 # Datos de eventos
+│   │   └── checkout-mocks.ts         # Datos MOCK de checkout
+│   │
+│   ├── 📂 types/                     # Definiciones TypeScript
+│   │   ├── event.ts                  # Tipos de eventos
+│   │   └── checkout.ts               # Tipos de checkout
+│   │
+│   ├── App.tsx                       # Componente raíz + Router
+│   ├── main.tsx                      # Entry point
+│   ├── index.css                     # Estilos globales
+│   └── vite-env.d.ts                 # Tipos de Vite
+│
+├── 📂 documentacion/                 # 📚 Documentación del proyecto
+│   ├── README.md                     # Guía de inicio rápido
+│   ├── DOCUMENTACION.md              # Documentación técnica completa (este archivo)
+│   ├── CHANGELOG.md                  # Historial de cambios
+│   └── Milestone-1.md                # Plan de implementación Checkout
+│
+├── 📂 public/                        # Assets estáticos
+│
+├── 📂 node_modules/                  # Dependencias (generado)
+│
+├── 📄 README.md                      # README principal del proyecto
+├── 📄 index.html                     # HTML principal
+├── 📄 package.json                   # Dependencias y scripts
+├── 📄 package-lock.json              # Lock de dependencias
+├── 📄 vite.config.ts                 # Configuración de Vite
+├── 📄 tsconfig.json                  # Configuración TypeScript (base)
+├── 📄 tsconfig.app.json              # Configuración TypeScript (app)
+├── 📄 tsconfig.node.json             # Configuración TypeScript (node)
+├── 📄 tailwind.config.js             # Configuración Tailwind CSS
+├── 📄 postcss.config.js              # Configuración PostCSS
+├── 📄 eslint.config.js               # Configuración ESLint
+└── 📄 .gitignore                     # Archivos ignorados por Git
 ```
 
 ### Modelo de Datos
@@ -162,6 +206,202 @@ interface Session {
   expiresAt: string;             // ISO date (7 días desde login)
 }
 ```
+
+### Estadísticas del Proyecto
+
+#### Código Fuente
+
+| Categoría | Archivos | Líneas Aprox. |
+|-----------|----------|---------------|
+| Autenticación | 7 | ~870 |
+| Componentes Globales | 12 | ~1,200 |
+| Páginas | 6 | ~1,800 |
+| Contextos | 2 | ~280 |
+| Servicios | 2 | ~400 |
+| Datos y Tipos | 4 | ~250 |
+| **Total** | **33** | **~4,800** |
+
+#### Documentación
+
+| Documento | Líneas | Última Actualización |
+|-----------|--------|---------------------|
+| README.md (raíz) | ~150 | Dic 19, 2025 |
+| README.md (doc) | ~220 | Dic 19, 2025 |
+| DOCUMENTACION.md | ~2,600 | Dic 19, 2025 |
+| CHANGELOG.md | ~900 | Dic 19, 2025 |
+| Milestone-1.md | ~500 | Dic 19, 2025 |
+| **Total** | **~4,370** | - |
+
+### Organización por Funcionalidad
+
+#### 🔐 Autenticación
+```
+app/auth/
+├── components/    → UI de autenticación
+├── context/       → Estado global (AuthContext)
+├── services/      → Lógica de negocio (mockAuthService)
+└── types/         → Tipos TypeScript
+```
+
+#### 🛒 Carrito y Checkout
+```
+app/context/
+└── CartContext.tsx    → Estado del carrito
+
+app/services/
+└── mockCheckoutService.ts    → Lógica de órdenes
+
+app/components/
+├── OrderSummary.tsx          → Resumen de compra
+├── PaymentMethodSelector.tsx → Selector de pago
+├── PromoCodeInput.tsx        → Códigos promocionales
+└── ShippingForm.tsx          → Información de contacto
+```
+
+#### 🎨 UI Global
+```
+app/components/
+├── Header.tsx           → Navegación
+├── Hero.tsx             → Landing hero
+├── EventsSection.tsx    → Eventos destacados
+├── EventCard.tsx        → Tarjeta de evento
+├── SearchBar.tsx        → Búsqueda y filtros
+├── BenefitsSection.tsx  → Beneficios
+├── SecuritySection.tsx  → Seguridad
+└── Footer.tsx           → Pie de página
+```
+
+#### 📄 Páginas
+
+**Públicas:**
+```
+app/pages/
+├── HomePage.tsx           → Landing page (/)
+├── EventsPage.tsx         → Catálogo (/eventos)
+├── EventDetailsPage.tsx   → Detalles (/eventos/:id/details)
+└── CheckoutPage.tsx       → Proceso de compra (/checkout)
+```
+
+**Protegidas (requieren autenticación):**
+```
+app/pages/(protected)/
+├── ProfilePage.tsx        → Perfil (/profile)
+└── SettingsPage.tsx       → Configuración (/profile/settings)
+```
+
+### Rutas de la Aplicación
+
+#### Rutas Públicas
+```
+/                      → HomePage
+/eventos               → EventsPage
+/eventos/:id/details   → EventDetailsPage
+/checkout              → CheckoutPage (requiere items en carrito)
+```
+
+#### Rutas Protegidas (requieren autenticación)
+```
+/profile               → ProfilePage
+/profile/settings      → SettingsPage
+```
+
+### Flujo de Datos Principal
+
+#### Autenticación
+```
+Usuario → UI (Forms) → AuthContext → mockAuthService → localStorage
+                ↓
+         Estado Global (useAuth)
+                ↓
+         Componentes (Header, ProtectedRoute, etc.)
+```
+
+#### Carrito de Compras
+```
+Usuario → EventDetailsPage (selecciona entradas)
+    ↓
+addItem(event, ticketType, quantity)
+    ↓
+CartContext actualiza estado
+    ↓
+localStorage guarda carrito
+    ↓
+Header muestra icono con badge
+    ↓
+Usuario navega a /checkout
+    ↓
+CheckoutPage procesa compra
+    ↓
+mockCheckoutService crea orden
+    ↓
+Carrito se limpia después de compra exitosa
+```
+
+#### Eventos
+```
+events.ts (datos estáticos)
+    ↓
+EventsPage / EventDetailsPage
+    ↓
+EventCard (componente)
+    ↓
+Usuario
+```
+
+### Dependencias Principales
+
+#### Producción
+```json
+{
+  "react": "^18.3.1",
+  "react-dom": "^18.3.1",
+  "react-router-dom": "^7.10.0",
+  "lucide-react": "^0.344.0"
+}
+```
+
+#### Desarrollo
+```json
+{
+  "typescript": "^5.5.3",
+  "vite": "^5.4.2",
+  "tailwindcss": "^3.4.1",
+  "eslint": "^9.9.1",
+  "@types/react": "^18.3.5",
+  "@types/react-dom": "^18.3.0"
+}
+```
+
+### Comandos de Desarrollo
+
+```bash
+# Desarrollo
+npm run dev              # Puerto 5174
+
+# Build
+npm run build            # Genera dist/
+
+# Preview
+npm run preview          # Preview del build
+
+# Calidad
+npm run lint             # ESLint
+npm run typecheck        # TypeScript
+```
+
+### Convenciones de Nomenclatura
+
+#### Archivos
+- **Componentes:** PascalCase (ej: `EventCard.tsx`)
+- **Páginas:** PascalCase + "Page" (ej: `HomePage.tsx`)
+- **Servicios:** camelCase + "Service" (ej: `mockAuthService.ts`)
+- **Contextos:** PascalCase + "Context" (ej: `CartContext.tsx`)
+- **Tipos:** camelCase + ".types" (ej: `auth.types.ts`) o solo camelCase (ej: `checkout.ts`)
+- **Datos:** camelCase (ej: `events.ts`)
+
+#### Carpetas
+- **Carpetas normales:** camelCase (ej: `components/`, `pages/`)
+- **Carpetas especiales:** Entre paréntesis para agrupar (ej: `(protected)/`)
 
 ---
 
@@ -261,8 +501,16 @@ Un sistema **MOCK** simula un backend real pero funciona completamente en el fro
 **Funcionalidad:**
 - Verifica si hay usuario autenticado
 - Muestra loading mientras verifica sesión
-- Redirige a home si no autenticado
+- Muestra página de "Autenticación Requerida" si no autenticado
 - Permite acceso si autenticado
+
+**Características de la página de autenticación requerida:**
+- Icono de bloqueo visual
+- Mensaje claro explicando por qué no puede acceder
+- Botón "Iniciar Sesión" que abre el modal de login
+- Botón "Crear Cuenta" que abre el modal de registro
+- Botón "Volver al Inicio" para navegación
+- Diseño consistente con el resto de la aplicación
 
 **Uso:**
 ```typescript
@@ -276,6 +524,17 @@ Un sistema **MOCK** simula un backend real pero funciona completamente en el fro
 />
 ```
 
+**Antes vs Ahora:**
+
+*Antes (v1.3.1):*
+- Redirect silencioso a `/` si no autenticado
+- Usuario confundido sobre por qué fue redirigido
+
+*Ahora (v1.3.2):*
+- Página informativa clara
+- Botones de acción directos para login/registro
+- Mejor experiencia de usuario
+
 ### AuthContext y useAuth Hook
 
 **Hook principal para acceder al estado de autenticación:**
@@ -285,6 +544,10 @@ const {
   user,              // User | null - Usuario actual
   isLoading,         // boolean - Cargando sesión
   isAuthenticated,   // boolean - Si hay usuario autenticado
+  authModalOpen,     // boolean - Estado del modal de autenticación
+  authModalMode,     // 'login' | 'register' - Modo del modal
+  setAuthModalOpen,  // (open: boolean) => void - Abrir/cerrar modal
+  setAuthModalMode,  // (mode: 'login' | 'register') => void - Cambiar modo
   signUp,            // (credentials) => Promise<void>
   signIn,            // (credentials) => Promise<void>
   signOut,           // () => Promise<void>
@@ -995,7 +1258,536 @@ export const upcomingEvents: FightEvent[] = [
 
 ---
 
-## 7. Guía de Desarrollo
+## 7. Módulo de Checkout
+
+### Visión General
+
+El módulo de checkout implementa un sistema completo de carrito de compras y procesamiento de órdenes usando mocks. Incluye gestión de carrito, selección de entradas, formularios de información, métodos de pago y confirmación de órdenes.
+
+### CartContext
+
+**Ubicación:** `app/context/CartContext.tsx`
+
+**Funcionalidad:** Context global que gestiona el estado del carrito de compras con persistencia en localStorage.
+
+#### Hook useCart()
+
+```typescript
+const {
+  items,            // CheckoutItem[] - Items en el carrito
+  itemCount,        // number - Cantidad total de items
+  subtotal,         // number - Subtotal en euros
+  addItem,          // (event, ticketType, quantity) => void
+  removeItem,       // (itemId) => void
+  updateQuantity,   // (itemId, quantity) => void
+  clearCart,        // () => void
+  getTotal,         // (discount?) => number
+} = useCart();
+```
+
+#### Persistencia
+
+- **Key de localStorage:** `'strike_ground_cart'`
+- **Guardado automático:** Cada vez que cambia el carrito
+- **Carga automática:** Al montar el componente
+
+#### Ejemplo de Uso
+
+```typescript
+import { useCart } from '../context/CartContext';
+
+function MyComponent() {
+  const { items, addItem, subtotal } = useCart();
+
+  const handleAddToCart = () => {
+    // addItem recibe: evento completo, tipo de entrada, cantidad
+    addItem(event, 'vip', 2);
+  };
+
+  return (
+    <div>
+      <p>Items: {items.length}</p>
+      <p>Subtotal: {subtotal}€</p>
+      <button onClick={handleAddToCart}>Agregar</button>
+    </div>
+  );
+}
+```
+
+### mockCheckoutService
+
+**Ubicación:** `app/services/mockCheckoutService.ts`
+
+**Funcionalidad:** Servicio MOCK para gestionar órdenes y simular procesamiento de pagos.
+
+#### Métodos Principales
+
+##### createOrder(orderData)
+
+Crea una nueva orden y la guarda en localStorage.
+
+```typescript
+const order = await mockCheckoutService.createOrder({
+  items,
+  shippingInfo,
+  paymentMethod,
+  subtotal,
+  discount,
+  total,
+  promoCode,
+  userId,
+});
+// Retorna: Order con ID único generado
+```
+
+##### getOrders(userId)
+
+Obtiene todas las órdenes de un usuario específico.
+
+```typescript
+const orders = await mockCheckoutService.getOrders(userId);
+// Retorna: Order[]
+```
+
+##### simulatePayment()
+
+Simula el procesamiento de un pago con 90% de probabilidad de éxito.
+
+```typescript
+const result = await mockCheckoutService.simulatePayment();
+// Retorna: { success: boolean, message: string }
+// Demora: 3 segundos
+```
+
+##### validatePromoCode(code)
+
+Valida si un código promocional es válido.
+
+```typescript
+const promoCode = mockCheckoutService.validatePromoCode('PROMO10');
+// Retorna: PromoCode | null
+```
+
+#### Códigos Promocionales Disponibles
+
+| Código | Descuento | Descripción |
+|--------|-----------|-------------|
+| PROMO10 | 10% | Descuento general |
+| PROMO20 | 20% | Descuento especial |
+| PRIMERA | 15% | Primera compra |
+| VIP30 | 30% | Descuento VIP |
+
+### CheckoutPage
+
+**Ubicación:** `app/pages/CheckoutPage.tsx`  
+**Ruta:** `/checkout`
+
+**Funcionalidad:** Página principal de checkout con wizard de 3 pasos.
+
+#### Características
+
+**1. Protección de Ruta**
+- Redirige a `/eventos` si el carrito está vacío
+- Permite checkout como invitado (no requiere autenticación)
+
+**2. Wizard de 3 Pasos**
+
+```
+Paso 1: Información de Contacto
+  ↓
+Paso 2: Método de Pago
+  ↓
+Paso 3: Confirmación de Orden
+```
+
+**3. Layout Responsive**
+- Desktop: 2 columnas (formulario + resumen sticky)
+- Mobile: 1 columna (formulario arriba, resumen abajo)
+
+#### Paso 1: Información de Contacto
+
+Componente: `ShippingForm`
+
+**Campos:**
+- Nombre completo (requerido, mín 3 caracteres)
+- Email (requerido, formato válido)
+- Teléfono (requerido, formato español)
+- Dirección (opcional)
+
+**Validaciones:**
+- Email: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+- Teléfono: `/^[6-9]\d{8}$/` (formato español)
+
+**Pre-rellenado:**
+Si el usuario está autenticado, los campos se pre-rellenan con sus datos del perfil.
+
+#### Paso 2: Método de Pago
+
+Componentes: `PaymentMethodSelector`, `PromoCodeInput`
+
+**Métodos de Pago Disponibles:**
+1. Tarjeta de Crédito/Débito
+   - Formulario MOCK con validación visual
+   - Campos: Número, CVV, Fecha de expiración
+2. PayPal
+3. Bizum
+
+**Sistema de Códigos Promocionales:**
+- Input para ingresar código
+- Validación en tiempo real (500ms delay)
+- Badge visual cuando se aplica
+- Botón para remover código aplicado
+- Cálculo automático de descuento
+
+**Términos y Condiciones:**
+- Checkbox requerido antes de proceder
+- No se puede procesar el pago sin aceptar
+
+#### Paso 3: Confirmación
+
+**Procesamiento del Pago:**
+1. Loading state (3 segundos)
+2. Simulación de pago (90% éxito)
+3. Si exitoso → Crear orden y mostrar confirmación
+4. Si rechazado → Mostrar error y permitir reintentar
+
+**Información Mostrada:**
+- Icono de éxito
+- Número de orden único
+- Resumen de información de contacto
+- Total pagado
+- Botones de acción: "Ver Mis Entradas" y "Volver al Inicio"
+
+### Componentes del Checkout
+
+#### OrderSummary
+
+**Ubicación:** `app/components/OrderSummary.tsx`
+
+**Props:**
+```typescript
+{
+  items: CheckoutItem[];
+  subtotal: number;
+  discount?: number;
+  total: number;
+  onRemoveItem?: (itemId: string) => void;
+  promoCode?: string;
+}
+```
+
+**Funcionalidad:**
+- Muestra lista de items con imagen, nombre, tipo y precio
+- Botón para eliminar items individuales
+- Cálculo de subtotal, descuento y total
+- Badge del código promocional aplicado
+
+#### ShippingForm
+
+**Ubicación:** `app/components/ShippingForm.tsx`
+
+**Props:**
+```typescript
+{
+  onSubmit: (data: ShippingInfo) => void;
+  initialData?: ShippingInfo;
+}
+```
+
+**Funcionalidad:**
+- Formulario completo con validaciones
+- Mensajes de error en tiempo real
+- Iconos de Lucide React para cada campo
+- Botón de submit con validación
+
+#### PaymentMethodSelector
+
+**Ubicación:** `app/components/PaymentMethodSelector.tsx`
+
+**Props:**
+```typescript
+{
+  selectedMethod: PaymentMethod | null;
+  onSelect: (method: PaymentMethod) => void;
+}
+```
+
+**Funcionalidad:**
+- Cards seleccionables para cada método
+- Formulario condicional para tarjeta
+- Formateo automático de número de tarjeta
+- Formateo automático de fecha de expiración
+- Validación visual
+
+#### PromoCodeInput
+
+**Ubicación:** `app/components/PromoCodeInput.tsx`
+
+**Props:**
+```typescript
+{
+  onApply: (code: string, discount: number) => void;
+  appliedCode?: string;
+  onRemove?: () => void;
+}
+```
+
+**Funcionalidad:**
+- Input con botón "Aplicar"
+- Loading state durante validación
+- Mensajes de error para códigos inválidos
+- Badge verde para código aplicado
+- Botón X para remover código
+
+### Integración con EventDetailsPage
+
+**Modificaciones realizadas:**
+
+1. **Selector de Tipo de Entrada**
+   - Cards clicables: General, VIP, Ringside
+   - Borde rojo cuando seleccionado
+   - Precios dinámicos según tipo
+
+2. **Selector de Cantidad**
+   - Botones +/- para ajustar cantidad
+   - Mínimo 1, máximo 10
+   - Cálculo de precio total en tiempo real
+
+3. **Botón Agregar al Carrito**
+   - Icono de carrito
+   - Llama a `addItem(event, ticketType, quantity)`
+   - Muestra toast de confirmación
+
+4. **Toast de Confirmación**
+   - Aparece por 3 segundos
+   - Muestra tipo y cantidad de entradas agregadas
+   - Botón "Ver Carrito" que redirige a `/checkout`
+
+### Integración con Header
+
+**Modificaciones realizadas:**
+
+1. **Icono de Carrito**
+   - Icono `ShoppingCart` de Lucide React
+   - Badge con cantidad de items
+   - Hover effect
+
+2. **Dropdown del Carrito**
+   - Vista rápida de items en el carrito
+   - Imagen miniatura de cada evento
+   - Nombre, tipo de entrada y precio
+   - Botón para eliminar items
+   - Subtotal calculado
+   - Botón "Ir al Checkout"
+
+### Tipos TypeScript
+
+**Ubicación:** `app/types/checkout.ts`
+
+```typescript
+// Tipo de entrada
+export type TicketType = 'general' | 'vip' | 'ringside';
+
+// Item en el carrito
+export interface CheckoutItem {
+  id: string;
+  event: FightEvent;        // Evento completo
+  ticketType: TicketType;
+  quantity: number;
+  pricePerTicket: number;
+}
+
+// Información de envío/contacto
+export interface ShippingInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+  address?: string;
+}
+
+// Método de pago
+export type PaymentMethodType = 'card' | 'paypal' | 'bizum';
+
+export interface PaymentMethod {
+  type: PaymentMethodType;
+  lastFourDigits?: string;
+}
+
+// Orden completa
+export interface Order {
+  id: string;
+  userId?: string;
+  items: CheckoutItem[];
+  shippingInfo: ShippingInfo;
+  paymentMethod: PaymentMethod;
+  subtotal: number;
+  discount: number;
+  total: number;
+  promoCode?: string;
+  status: OrderStatus;
+  createdAt: string;
+}
+
+// Código promocional
+export interface PromoCode {
+  code: string;
+  discountPercent: number;
+  description: string;
+  isActive: boolean;
+}
+```
+
+### Datos MOCK
+
+**Ubicación:** `app/data/checkout-mocks.ts`
+
+```typescript
+// Métodos de pago disponibles
+export const availablePaymentMethods: PaymentMethodType[] = [
+  'card',
+  'paypal',
+  'bizum'
+];
+
+// Labels de métodos de pago
+export const paymentMethodLabels = {
+  card: 'Tarjeta de Crédito/Débito',
+  paypal: 'PayPal',
+  bizum: 'Bizum',
+};
+
+// Multiplicadores de precio por tipo de entrada
+export const ticketPriceMultipliers = {
+  general: 1,    // Precio base
+  vip: 2,        // Precio x2
+  ringside: 3,   // Precio x3
+};
+```
+
+### Flujo Completo de Checkout
+
+```
+1. Usuario navega a EventDetailsPage
+   ↓
+2. Selecciona tipo de entrada y cantidad
+   ↓
+3. Click en "Agregar al Carrito"
+   → addItem(event, ticketType, quantity)
+   → CartContext agrega item
+   → localStorage actualizado
+   → Toast de confirmación
+   ↓
+4. Usuario click en icono de carrito en Header
+   → Dropdown muestra items
+   ↓
+5. Click en "Ir al Checkout"
+   → Navigate a /checkout
+   ↓
+6. CheckoutPage - Paso 1
+   → Completar formulario de información
+   → Validaciones en tiempo real
+   → Click "Continuar al Pago"
+   ↓
+7. CheckoutPage - Paso 2
+   → Seleccionar método de pago
+   → (Opcional) Aplicar código promocional
+   → Aceptar términos y condiciones
+   → Click "Procesar Pago"
+   ↓
+8. Simulación de Pago (3 segundos)
+   → 90% éxito / 10% rechazo
+   ↓
+9a. Si éxito:
+   → Crear orden en mockCheckoutService
+   → Guardar en localStorage
+   → Limpiar carrito
+   → Mostrar Paso 3 (Confirmación)
+   → Número de orden generado
+   
+9b. Si rechazo:
+   → Mostrar mensaje de error
+   → Permitir reintentar
+```
+
+### localStorage Keys
+
+```javascript
+'strike_ground_cart'    // Array<CheckoutItem> - Carrito actual
+'strike_ground_orders'  // Array<Order> - Todas las órdenes
+```
+
+### Migración a Producción - Módulo de Checkout
+
+Para migrar el módulo de checkout a producción:
+
+#### 1. Backend de Órdenes
+
+**Opción A: Supabase**
+```typescript
+// Tabla orders
+CREATE TABLE orders (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users,
+  items JSONB NOT NULL,
+  shipping_info JSONB NOT NULL,
+  payment_method JSONB NOT NULL,
+  subtotal DECIMAL(10,2) NOT NULL,
+  discount DECIMAL(10,2) DEFAULT 0,
+  total DECIMAL(10,2) NOT NULL,
+  promo_code TEXT,
+  status TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Opción B: API REST Custom**
+```
+POST /api/orders       → Crear orden
+GET /api/orders/:id    → Obtener orden
+GET /api/orders/user/:userId → Órdenes del usuario
+```
+
+#### 2. Pasarela de Pago Real
+
+**Stripe (Recomendado)**
+```bash
+npm install @stripe/stripe-js @stripe/react-stripe-js
+```
+
+```typescript
+// Integración con Stripe
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripe = await loadStripe('pk_live_...');
+
+const { error, paymentIntent } = await stripe.confirmCardPayment(
+  clientSecret,
+  {
+    payment_method: {
+      card: elements.getElement(CardElement),
+      billing_details: { name, email },
+    },
+  }
+);
+```
+
+**PayPal**
+```bash
+npm install @paypal/react-paypal-js
+```
+
+#### 3. Seguridad
+
+- ❗ **NUNCA** procesar pagos en el frontend
+- ❗ Usar HTTPS obligatorio
+- ❗ Validar todas las transacciones en el servidor
+- ❗ Implementar rate limiting
+- ❗ Sanitizar inputs
+- ❗ Auditar todas las transacciones
+
+---
+
+## 8. Guía de Desarrollo
 
 ### Setup del Entorno
 
@@ -1213,7 +2005,7 @@ console.log('[MOCK] Email verificado exitosamente');
 
 ---
 
-## 8. API Reference
+## 9. API Reference
 
 ### useAuth Hook
 
@@ -1222,6 +2014,10 @@ const {
   user: User | null,
   isLoading: boolean,
   isAuthenticated: boolean,
+  authModalOpen: boolean,
+  authModalMode: 'login' | 'register',
+  setAuthModalOpen: (open: boolean) => void,
+  setAuthModalMode: (mode: 'login' | 'register') => void,
   signUp: (credentials: RegisterCredentials) => Promise<void>,
   signIn: (credentials: LoginCredentials) => Promise<void>,
   signOut: () => Promise<void>,
@@ -1371,6 +2167,10 @@ export interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  authModalOpen: boolean;
+  authModalMode: 'login' | 'register';
+  setAuthModalOpen: (open: boolean) => void;
+  setAuthModalMode: (mode: 'login' | 'register') => void;
   signUp: (credentials: RegisterCredentials) => Promise<void>;
   signIn: (credentials: LoginCredentials) => Promise<void>;
   signOut: () => Promise<void>;
@@ -1382,7 +2182,7 @@ export interface AuthContextType {
 
 ---
 
-## 9. Migración a Producción
+## 10. Migración a Producción
 
 ### ⚠️ Importante
 
@@ -1693,7 +2493,7 @@ async function uploadToSupabase(file: File): Promise<string> {
 
 ---
 
-## 10. Solución de Problemas
+## 11. Solución de Problemas
 
 ### Problemas Comunes
 
@@ -1873,7 +2673,7 @@ Busca estos logs en la consola para debugging.
 
 ---
 
-## 11. FAQ
+## 12. FAQ
 
 ### General
 
@@ -2067,11 +2867,11 @@ Para más información o ayuda específica, consulta las secciones relevantes de
 
 ---
 
-**Versión**: 1.3.0 (MOCK)  
+**Versión**: 1.4.0 (MOCK)  
 **Última actualización**: Diciembre 19, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional + Estructura Reorganizada
+**Estado**: ✅ Sistema MOCK completamente funcional con Checkout + Documentación Unificada
 
 ---
 
-*¿Preguntas o problemas? Revisa la sección [Solución de Problemas](#10-solución-de-problemas) o [FAQ](#11-faq).*
+*¿Preguntas o problemas? Revisa la sección [Solución de Problemas](#11-solución-de-problemas) o [FAQ](#12-faq).*
 

@@ -1,5 +1,5 @@
 // Modal de Autenticación - Muestra Login o Register
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
@@ -13,6 +13,13 @@ interface AuthModalProps {
 
 export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot'>(defaultTab);
+
+  // Sincronizar activeTab con defaultTab cuando cambie o cuando se abra el modal
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab(defaultTab);
+    }
+  }, [isOpen, defaultTab]);
 
   if (!isOpen) return null;
 

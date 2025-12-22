@@ -61,13 +61,30 @@ Password: Demo123!
   - Sidebar de compra de entradas con múltiples opciones
   - Diseño optimizado para conversión
 
+- **Sistema de Compras (MOCK)**
+  - Carrito de compras completo con persistencia
+  - Icono de carrito en Header con badge de cantidad
+  - Dropdown de vista rápida del carrito
+  - Agregar entradas desde página de detalles del evento
+  - Selección de tipo de entrada (General, VIP, Ringside)
+  - Selector de cantidad de entradas
+  - Proceso de checkout completo en 3 pasos
+  - Formulario de información de contacto
+  - Múltiples métodos de pago (Tarjeta, PayPal, Bizum)
+  - Sistema de códigos promocionales con descuentos
+  - Simulación de procesamiento de pago
+  - Confirmación de órdenes con número único
+  - Almacenamiento de órdenes en localStorage
+  - Notificaciones toast al agregar al carrito
+
 ### Pendiente ⚠️
 
 - Backend real (actualmente usa localStorage)
-- Sistema de compra de entradas
-- Pasarela de pago (Stripe/PayPal)
+- Pasarela de pago real (Stripe/PayPal)
 - Panel de administración
 - Generación de entradas con QR
+- Página "Mis Órdenes" en perfil de usuario
+- Sistema de notificaciones en tiempo real
 
 ## 🎯 Stack Tecnológico
 
@@ -75,7 +92,7 @@ Password: Demo123!
 Frontend:
 ├── React 18.3.1           # Framework UI
 ├── TypeScript 5.5.3       # Tipado estático
-├── React Router 6.x       # Navegación
+├── React Router 7.x       # Navegación
 ├── Tailwind CSS 3.4.1     # Estilos
 ├── Lucide React 0.344.0   # Iconos
 └── Vite 5.4.2             # Build tool
@@ -84,37 +101,28 @@ Backend (MOCK):
 └── localStorage           # Almacenamiento simulado
 ```
 
-## 📁 Estructura del Proyecto
+## 📚 Documentación Completa
 
+La documentación completa del proyecto está en la carpeta `documentacion/`:
+
+- 📘 [**Documentación Técnica**](documentacion/DOCUMENTACION.md) - Arquitectura, API y guías completas
+- 📝 [**Changelog**](documentacion/CHANGELOG.md) - Historial de cambios e implementaciones
+- 🎯 [**Milestone 1**](documentacion/Milestone-1.md) - Plan de implementación Checkout
+
+## 🎨 Rutas Disponibles
+
+### Rutas Públicas
 ```
-app/                       # Carpeta raíz de la aplicación
-├── auth/                  # Módulo de autenticación
-│   ├── components/        # UI de auth (modals, forms, etc.)
-│   ├── context/           # AuthContext + useAuth hook
-│   ├── services/          # mockAuthService (lógica MOCK)
-│   └── types/             # Tipos TypeScript
-├── components/            # Componentes globales
-│   ├── Header.tsx
-│   ├── Hero.tsx
-│   ├── EventsSection.tsx
-│   ├── EventCard.tsx
-│   ├── SearchBar.tsx
-│   ├── BenefitsSection.tsx
-│   ├── SecuritySection.tsx
-│   └── Footer.tsx
-├── pages/                 # Páginas de la aplicación
-│   ├── (protected)/       # Rutas protegidas (requieren autenticación)
-│   │   ├── ProfilePage.tsx
-│   │   └── SettingsPage.tsx
-│   ├── HomePage.tsx
-│   ├── EventsPage.tsx
-│   └── EventDetailsPage.tsx
-├── data/                  # Datos estáticos
-│   └── events.ts
-├── types/                 # Definiciones TypeScript
-│   └── event.ts
-├── App.tsx                # Componente raíz + Router
-└── main.tsx               # Entry point
+/                      → Landing page
+/eventos               → Catálogo completo de eventos con filtros
+/eventos/:id/details   → Detalles de un evento específico
+/checkout              → Proceso de compra (requiere items en carrito)
+```
+
+### Rutas Protegidas (requieren autenticación)
+```
+/profile               → Perfil de usuario
+/profile/settings      → Configuración de usuario
 ```
 
 ## 🛠️ Comandos Disponibles
@@ -132,34 +140,16 @@ npm run lint             # Linting con ESLint
 npm run typecheck        # Verificación de tipos TypeScript
 ```
 
-## 📚 Documentación Completa
-
-Para información detallada sobre arquitectura, API, guías de desarrollo y migración a producción, consulta:
-
-📖 **[DOCUMENTACION.md](./DOCUMENTACION.md)** - Documentación técnica completa
-
-📝 **[CHANGELOG.md](./CHANGELOG.md)** - Historial de cambios e implementaciones
-
-## 🎨 Rutas Disponibles
-
-```
-/                      → Landing page (pública)
-/eventos               → Catálogo completo de eventos con filtros (pública)
-/eventos/:id/details   → Detalles completos de un evento específico (pública)
-/profile               → Perfil de usuario (protegida, requiere login)
-/settings              → Configuración de usuario (protegida, requiere login)
-```
-
 ## ⚠️ Nota Importante: Sistema MOCK
 
-Este proyecto usa un **sistema MOCK** para autenticación y almacenamiento:
+Este proyecto usa un **sistema MOCK** para autenticación, carrito y procesamiento de órdenes:
 
 - ✅ Perfecto para desarrollo, demos y prototipado
 - ✅ No requiere servidor backend
 - ✅ Funcionalidad completa en el navegador
-- ❌ **NO apto para producción** (contraseñas sin encriptar, localStorage)
+- ❌ **NO apto para producción** (datos sin encriptar, localStorage)
 
-Para producción, ver la guía de migración en [DOCUMENTACION.md](./DOCUMENTACION.md#migración-a-producción).
+Para producción, ver la guía de migración en [DOCUMENTACION.md](documentacion/DOCUMENTACION.md#10-migración-a-producción).
 
 ## 🔐 Seguridad
 
@@ -170,13 +160,14 @@ Las contraseñas en el sistema MOCK se almacenan en **texto plano** en localStor
 - HTTPS obligatorio
 - Tokens JWT
 - Rate limiting
+- Pasarela de pago real (Stripe/PayPal)
 
 ## 🚀 Próximos Pasos
 
 1. **Probar el sistema**: Usa las credenciales demo y explora todas las funcionalidades
-2. **Leer la documentación**: Revisa `DOCUMENTACION.md` para entender la arquitectura
+2. **Leer la documentación**: Revisa `documentacion/DOCUMENTACION.md` para entender la arquitectura
 3. **Migrar a producción**: Sigue la guía de migración cuando estés listo
-4. **Implementar compras**: Integrar sistema de compra de entradas real
+4. **Implementar backend real**: Integrar con Supabase o tu backend preferido
 
 ## 🐛 Solución Rápida de Problemas
 
@@ -185,6 +176,7 @@ Las contraseñas en el sistema MOCK se almacenan en **texto plano** en localStor
 npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
+npm run dev
 ```
 
 ### Sesión no persiste
@@ -197,12 +189,17 @@ localStorage.clear()
 // Luego refrescar la página
 ```
 
+### Carrito vacío después de refrescar
+El carrito persiste en localStorage. Si se vació, puede ser que el navegador limpió localStorage o estás en modo incógnito.
+
 ## 📊 Estado del Proyecto
 
 ```
 🟢 Frontend:     100% completo
+🟢 Carrito:      100% funcional (MOCK)
+🟢 Checkout:     100% funcional (MOCK)
 🟡 Backend:      MOCK funcional
-🔴 Producción:   Requiere migración
+🔴 Producción:   Requiere migración a backend real
 ```
 
 ## 📄 Licencia
@@ -211,11 +208,11 @@ localStorage.clear()
 
 ---
 
-**Versión**: 1.3.0 (MOCK)  
+**Versión**: 1.4.0 (MOCK)  
 **Última actualización**: Diciembre 19, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional
+**Estado**: ✅ Sistema MOCK completamente funcional con Checkout
 
 ---
 
-*¿Necesitas ayuda? Revisa la [documentación completa](./DOCUMENTACION.md) o busca en [solución de problemas](./DOCUMENTACION.md#solución-de-problemas).*
+*¿Necesitas ayuda? Revisa la [documentación completa](documentacion/DOCUMENTACION.md) o busca en la sección de [solución de problemas](documentacion/DOCUMENTACION.md#11-solución-de-problemas).*
 

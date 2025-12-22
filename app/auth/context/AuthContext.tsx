@@ -7,6 +7,10 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  authModalOpen: boolean;
+  authModalMode: 'login' | 'register';
+  setAuthModalOpen: (open: boolean) => void;
+  setAuthModalMode: (mode: 'login' | 'register') => void;
   signUp: (credentials: RegisterCredentials) => Promise<void>;
   signIn: (credentials: LoginCredentials) => Promise<void>;
   signOut: () => Promise<void>;
@@ -20,6 +24,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
 
   // Cargar usuario al montar
   useEffect(() => {
@@ -79,6 +85,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     isLoading,
     isAuthenticated: !!user,
+    authModalOpen,
+    authModalMode,
+    setAuthModalOpen,
+    setAuthModalMode,
     signUp,
     signIn,
     signOut,

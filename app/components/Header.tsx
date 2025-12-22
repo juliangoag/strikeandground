@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Flame, User, LogOut, Settings, ChevronDown } from 'lucide-react';
+import { Flame, User, LogOut, Settings, ChevronDown, ShoppingCart, Trash2 } from 'lucide-react';
 import { useAuth } from '../auth/context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { AuthModal } from '../auth/components/AuthModal';
+import { ticketTypeLabels } from '../data/checkout-mocks';
 
 export function Header() {
-  const { user, isAuthenticated, signOut } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
+  const { user, isAuthenticated, signOut, authModalOpen, authModalMode, setAuthModalOpen, setAuthModalMode } = useAuth();
+  const { items, itemCount, subtotal, removeItem } = useCart();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showCart, setShowCart] = useState(false);
   const navigate = useNavigate();
 
   const handleAuthClick = (tab: 'login' | 'register') => {
-    setAuthModalTab(tab);
-    setShowAuthModal(true);
+    setAuthModalMode(tab);
+    setAuthModalOpen(true);
   };
 
   const handleLogout = async () => {
@@ -52,6 +54,94 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-3">
+              {/* Icono de carrito */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowCart(!showCart)}
+                  className="relative p-2 text-gray-300 hover:text-white transition-colors"
+                >
+                  <ShoppingCart className="w-6 h-6" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                      {itemCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* Dropdown del carrito */}
+                {showCart && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowCart(false)}
+                    ></div>
+                    <div className="absolute right-0 mt-2 w-96 bg-gray-900 border border-gray-800 rounded-lg shadow-xl z-50 max-h-[500px] overflow-hidden flex flex-col">
+                      <div className="p-4 border-b border-gray-800">
+                        <h3 className="text-white font-bold text-lg">Mi Carrito</h3>
+                        <p className="text-gray-400 text-sm">{itemCount} artículo(s)</p>
+                      </div>
+
+                      {items.length === 0 ? (
+                        <div className="p-8 text-center">
+                          <ShoppingCart className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                          <p className="text-gray-400">Tu carrito está vacío</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                            {items.map((item) => (
+                              <div
+                                key={item.id}
+                                className="flex gap-3 p-3 bg-black/50 rounded-lg border border-gray-800"
+                              >
+                                <img
+                                  src={item.event.imageUrl}
+                                  alt={item.event.title}
+                                  className="w-16 h-16 object-cover rounded"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-white font-semibold text-sm truncate">
+                                    {item.event.title}
+                                  </h4>
+                                  <p className="text-gray-400 text-xs">
+                                    {ticketTypeLabels[item.ticketType]} × {item.quantity}
+                                  </p>
+                                  <p className="text-red-500 font-bold text-sm">
+                                    {(item.pricePerTicket * item.quantity).toFixed(2)}€
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => removeItem(item.id)}
+                                  className="text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="p-4 border-t border-gray-800 bg-gray-900/50">
+                            <div className="flex justify-between mb-4">
+                              <span className="text-gray-400">Subtotal</span>
+                              <span className="text-white font-bold text-lg">
+                                {subtotal.toFixed(2)}€
+                              </span>
+                            </div>
+                            <Link
+                              to="/checkout"
+                              onClick={() => setShowCart(false)}
+                              className="block w-full bg-red-600 hover:bg-red-700 text-white text-center py-3 rounded-lg transition-colors font-semibold"
+                            >
+                              Ir al Checkout
+                            </Link>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
               {isAuthenticated && user ? (
                 // Usuario autenticado
                 <div className="relative">
@@ -94,7 +184,7 @@ export function Header() {
                           <button
                             onClick={() => {
                               setShowUserMenu(false);
-                              navigate('/settings');
+                              navigate('/profile/settings');
                             }}
                             className="w-full flex items-center gap-3 px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors text-sm"
                           >
@@ -140,9 +230,9 @@ export function Header() {
 
       {/* Auth Modal */}
       <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        defaultTab={authModalTab}
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        defaultTab={authModalMode}
       />
     </>
   );

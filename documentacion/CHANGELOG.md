@@ -4,6 +4,260 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.4.0] - Diciembre 19, 2025
+
+### 🛒 Sistema de Compras Completo (MOCK)
+
+#### ✨ Nuevas Funcionalidades
+
+**Carrito de Compras**
+- Context global de carrito (`CartContext`) con persistencia en localStorage
+- Hook `useCart()` para acceder al carrito desde cualquier componente
+- Funciones: `addItem()`, `removeItem()`, `updateQuantity()`, `clearCart()`, `getTotal()`
+- Persistencia automática del carrito entre sesiones
+- Icono de carrito en Header con badge de cantidad de items
+- Dropdown de vista rápida del carrito en Header
+- Eliminar items individuales desde el dropdown
+- Botón directo "Ir al Checkout" desde el carrito
+
+**Página de Detalles del Evento (EventDetailsPage)**
+- Selector interactivo de tipo de entrada (General, VIP, Ringside)
+- Control de cantidad de entradas (+/-)
+- Cálculo de precio total en tiempo real
+- Botón "Agregar al Carrito" con integración completa
+- Toast de confirmación al agregar items
+- Botón "Ver Carrito" en el toast
+
+**Página de Checkout Completa (/checkout)**
+- Wizard de 3 pasos: Información → Pago → Confirmación
+- Indicador visual de progreso entre pasos
+- Breadcrumbs de navegación
+- Resumen de orden sticky en desktop
+- Redirección automática si el carrito está vacío
+
+**Paso 1: Información de Contacto**
+- Formulario completo con validaciones
+- Campos: Nombre, Email, Teléfono, Dirección (opcional)
+- Validación de formato de email
+- Validación de teléfono español
+- Pre-rellenado con datos del usuario autenticado
+- Mensajes de error en tiempo real
+
+**Paso 2: Pago**
+- Selector de método de pago con 3 opciones:
+  - Tarjeta de Crédito/Débito (con formulario MOCK)
+  - PayPal
+  - Bizum
+- Formulario de tarjeta con validación (MOCK)
+- Sistema de códigos promocionales
+- Validación y aplicación de descuentos
+- Lista de códigos disponibles (demo):
+  - PROMO10 (10% descuento)
+  - PROMO20 (20% descuento)
+  - PRIMERA (15% descuento primera compra)
+  - VIP30 (30% descuento VIP)
+- Checkbox de términos y condiciones (requerido)
+- Simulación de procesamiento de pago (3 segundos)
+- Loading state durante procesamiento
+- Manejo de errores de pago rechazado
+
+**Paso 3: Confirmación**
+- Mensaje de éxito con icono
+- Número de orden único generado
+- Resumen de información de contacto
+- Total pagado destacado
+- Botones: "Ver Mis Entradas" y "Volver al Inicio"
+- Limpieza automática del carrito después de compra exitosa
+
+#### 📁 Nuevos Archivos Creados
+
+**Tipos TypeScript**
+- `app/types/checkout.ts` - Interfaces completas para checkout
+  - CheckoutItem
+  - ShippingInfo
+  - PaymentMethod
+  - Order
+  - PromoCode
+
+**Servicios**
+- `app/services/mockCheckoutService.ts` - Servicio MOCK completo
+  - createOrder() - Crear nueva orden
+  - getAllOrders() - Obtener todas las órdenes
+  - getOrders(userId) - Órdenes de un usuario
+  - getOrderById(orderId) - Orden específica
+  - simulatePayment() - Simular procesamiento de pago
+  - updateOrderStatus() - Actualizar estado de orden
+
+**Contextos**
+- `app/context/CartContext.tsx` - Context y Provider del carrito
+  - Estado global del carrito
+  - Persistencia en localStorage
+  - Hook useCart()
+
+**Datos MOCK**
+- `app/data/checkout-mocks.ts`
+  - Métodos de pago disponibles
+  - Códigos promocionales
+  - Etiquetas de tipos de entrada
+  - Tasas y comisiones
+
+**Componentes Reutilizables**
+- `app/components/OrderSummary.tsx` - Resumen de orden
+- `app/components/ShippingForm.tsx` - Formulario de envío
+- `app/components/PaymentMethodSelector.tsx` - Selector de pago
+- `app/components/PromoCodeInput.tsx` - Input de código promocional
+
+**Páginas**
+- `app/pages/CheckoutPage.tsx` - Página principal de checkout con wizard completo
+
+#### 🔄 Archivos Modificados
+
+- `app/App.tsx`
+  - Agregado `CartProvider` envolviendo toda la app
+  - Nueva ruta `/checkout`
+
+- `app/components/Header.tsx`
+  - Icono de carrito con badge de cantidad
+  - Dropdown de vista rápida del carrito
+  - Mostrar items del carrito en miniatura
+  - Botón "Ir al Checkout"
+  - Eliminar items individuales
+
+- `app/pages/EventDetailsPage.tsx`
+  - Selector interactivo de tipo de entrada
+  - Selector de cantidad
+  - Botón "Agregar al Carrito"
+  - Toast de confirmación
+  - Cálculo de precio total
+
+- `app/index.css`
+  - Animación `slideUp` para toasts
+
+#### 💾 LocalStorage Keys
+
+Nuevas keys utilizadas:
+- `strike_ground_cart` - Carrito de compras
+- `strike_ground_orders` - Órdenes completadas
+
+#### ✨ Características Técnicas
+
+**Validaciones**
+- Email: formato correcto con regex
+- Teléfono: formato español (9 dígitos, empieza con 6-9)
+- Nombre: mínimo 3 caracteres
+- Campos requeridos no vacíos
+
+**Estados de Carga**
+- Loading durante simulación de pago (3 segundos)
+- Spinner animado
+- Botones deshabilitados durante procesamiento
+
+**Manejo de Errores**
+- Pago rechazado (simulado 10% probabilidad)
+- Validación de formularios con mensajes claros
+- Prevención de acceso a checkout con carrito vacío
+
+**Diseño Responsive**
+- Mobile: 1 columna, formulario completo ancho
+- Desktop: 2 columnas (formulario 2/3, resumen 1/3 sticky)
+- Adaptación de todos los componentes
+
+#### 🎨 Diseño Consistente
+
+- Fondo negro/gris oscuro en todos los componentes
+- Textos blancos y grises
+- Acentos rojos para acciones principales
+- Bordes que cambian a rojo al hover
+- Transiciones suaves
+- Estilo visual consistente con el resto de la aplicación
+
+#### 📊 Flujo Completo de Compra
+
+```
+1. Usuario navega a EventDetailsPage
+2. Selecciona tipo de entrada (General/VIP/Ringside)
+3. Selecciona cantidad
+4. Click en "Agregar al Carrito"
+5. Toast de confirmación aparece
+6. Icono del carrito en Header muestra badge con cantidad
+7. Usuario puede ver carrito en dropdown del Header
+8. Click en "Ir al Checkout"
+9. CheckoutPage - Paso 1: Completa información de contacto
+10. Paso 2: Selecciona método de pago y aplica código promocional
+11. Acepta términos y condiciones
+12. Click en "Pagar"
+13. Simulación de procesamiento (3 segundos)
+14. Paso 3: Confirmación con número de orden
+15. Carrito se vacía automáticamente
+16. Orden guardada en localStorage
+```
+
+#### ⚠️ Notas Importantes
+
+- **Sistema MOCK**: Todo es simulado, no hay procesamiento real de pagos
+- **localStorage**: Datos guardados localmente en el navegador
+- **Seguridad**: NO apto para producción sin backend real
+- **Migración**: Preparado para integración con Stripe/PayPal en futuro
+
+#### 📦 Sin Dependencias Nuevas
+
+- Utiliza únicamente las dependencias existentes
+- React, TypeScript, React Router, Tailwind CSS, Lucide React
+
+---
+
+## [1.3.2] - Diciembre 19, 2025
+
+### ✨ Mejora de Experiencia de Usuario
+
+#### ✅ Implementado
+- **Ruta de Configuración Reorganizada**
+  - Cambio de ruta: `/settings` → `/profile/settings`
+  - Mejor organización semántica (configuración como parte del perfil)
+  - Estructura de URLs más intuitiva y jerárquica
+  - Actualizado en Header y App.tsx
+
+- **Página de Autenticación Requerida en Rutas Protegidas**
+  - Las rutas protegidas ahora muestran una página informativa en lugar de redirigir silenciosamente
+  - Interfaz clara con icono de bloqueo y mensaje explicativo
+  - Botones directos para "Iniciar Sesión" y "Crear Cuenta"
+  - Botón "Volver al Inicio" para mejor navegación
+  - Diseño consistente con el resto de la aplicación
+  
+- **Estado del Modal de Autenticación Movido al Contexto**
+  - El estado del modal ahora es global (AuthContext)
+  - Permite que cualquier componente pueda abrir el modal de autenticación
+  - El ProtectedRoute puede abrir el modal directamente desde la página de autenticación requerida
+  - Mejor UX: el usuario no pierde el contexto de dónde estaba
+
+#### 🔄 Archivos Modificados
+- `app/auth/context/AuthContext.tsx` - Estado del modal agregado al contexto
+- `app/components/Header.tsx` - Usa el estado del contexto para el modal
+- `app/auth/components/ProtectedRoute.tsx` - Nueva interfaz de autenticación requerida
+- `DOCUMENTACION.md` - Actualizada sección de ProtectedRoute y AuthContext
+- `CHANGELOG.md` - Documentación de cambios
+
+#### ✨ Mejoras de UX
+- ✅ Usuario entiende claramente por qué no puede acceder a una página
+- ✅ Acceso directo a login/registro desde la página bloqueada
+- ✅ No hay confusión con redirects silenciosos
+- ✅ Mejor experiencia de navegación
+- ✅ Consistencia visual en toda la aplicación
+
+#### 📊 Impacto
+Antes:
+- Usuario intenta acceder a `/profile` sin autenticación
+- Redirect inmediato a `/` (página principal)
+- Usuario confundido: "¿Por qué me sacó?"
+
+Ahora:
+- Usuario intenta acceder a `/profile` sin autenticación
+- Ve página clara: "Autenticación Requerida"
+- Puede iniciar sesión o registrarse directamente
+- Mejor experiencia y claridad
+
+---
+
 ## [1.3.1] - Diciembre 19, 2025
 
 ### 🐛 Correcciones y Limpieza
@@ -658,5 +912,5 @@ src/
 
 **Mantenido por:** Equipo Strike & Ground  
 **Última actualización:** Diciembre 19, 2025  
-**Versión actual:** 1.3.0 (MOCK)
+**Versión actual:** 1.3.2 (MOCK)
 
