@@ -1,8 +1,6 @@
 // Página de Configuración de Usuario
 import { useState } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
-import { Header } from '../../components/Header';
-import { Footer } from '../../components/Footer';
 import { 
   Lock, 
   Bell, 
@@ -25,10 +23,7 @@ export function SettingsPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-black">
-      <Header />
-
-      <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -81,9 +76,6 @@ export function SettingsPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </div>
   );
 }
 

@@ -68,10 +68,14 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         {/* Ciudad Dropdown */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => {
               setShowCityDropdown(!showCityDropdown);
               setShowCategoryDropdown(false);
             }}
+            aria-label="Seleccionar ciudad"
+            aria-expanded={showCityDropdown}
+            aria-haspopup="true"
             className="w-full flex items-center justify-between gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-3 rounded-lg transition-colors border border-gray-700"
           >
             <div className="flex items-center gap-2">
@@ -92,7 +96,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
                 {cities.map((city) => (
                   <button
                     key={city}
+                    type="button"
                     onClick={() => handleCitySelect(city)}
+                    aria-label={`Seleccionar ${city}`}
                     className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                       selectedCity === city
                         ? 'bg-red-600 text-white'
@@ -110,10 +116,14 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         {/* Categorías Dropdown */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => {
               setShowCategoryDropdown(!showCategoryDropdown);
               setShowCityDropdown(false);
             }}
+            aria-label="Seleccionar categoría"
+            aria-expanded={showCategoryDropdown}
+            aria-haspopup="true"
             className="w-full flex items-center justify-between gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-3 rounded-lg transition-colors border border-gray-700"
           >
             <div className="flex items-center gap-2">
@@ -136,7 +146,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
                 {categories.map((category) => (
                   <button
                     key={category}
+                    type="button"
                     onClick={() => handleCategorySelect(category)}
+                    aria-label={`Seleccionar ${category}`}
                     className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                       selectedCategory === category
                         ? 'bg-red-600 text-white'

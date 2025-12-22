@@ -208,9 +208,9 @@ El carrito persiste en localStorage. Si se vació, puede ser que el navegador li
 
 ---
 
-**Versión**: 1.4.0 (MOCK)  
-**Última actualización**: Diciembre 19, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional con Checkout
+**Versión**: 1.5.1 (MOCK)  
+**Última actualización**: Diciembre 22, 2025  
+**Estado**: ✅ Sistema MOCK completamente funcional + Código 100% Auditado
 
 ---
 

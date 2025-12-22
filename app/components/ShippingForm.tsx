@@ -10,14 +10,14 @@ interface ShippingFormProps {
 export function ShippingForm({ onSubmit, initialData }: ShippingFormProps) {
   const [formData, setFormData] = useState<ShippingInfo>(
     initialData || {
-      name: '',
+      fullName: '',
       email: '',
       phone: '',
       address: '',
     }
   );
 
-  const [errors, setErrors] = useState<Partial<ShippingInfo>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof ShippingInfo, string>>>({});
 
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,10 +31,10 @@ export function ShippingForm({ onSubmit, initialData }: ShippingFormProps) {
   };
 
   const validate = (): boolean => {
-    const newErrors: Partial<ShippingInfo> = {};
+    const newErrors: Partial<Record<keyof ShippingInfo, string>> = {};
 
-    if (!formData.name || formData.name.trim().length < 3) {
-      newErrors.name = 'El nombre debe tener al menos 3 caracteres';
+    if (!formData.fullName || formData.fullName.trim().length < 3) {
+      newErrors.fullName = 'El nombre debe tener al menos 3 caracteres';
     }
 
     if (!formData.email || !validateEmail(formData.email)) {
@@ -74,15 +74,15 @@ export function ShippingForm({ onSubmit, initialData }: ShippingFormProps) {
         </label>
         <input
           type="text"
-          value={formData.name}
-          onChange={(e) => handleChange('name', e.target.value)}
+          value={formData.fullName}
+          onChange={(e) => handleChange('fullName', e.target.value)}
           className={`w-full bg-black border ${
-            errors.name ? 'border-red-500' : 'border-gray-700'
+            errors.fullName ? 'border-red-500' : 'border-gray-700'
           } rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors`}
           placeholder="Ej: Juan García Martínez"
         />
-        {errors.name && (
-          <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+        {errors.fullName && (
+          <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
         )}
       </div>
 

@@ -37,28 +37,30 @@ export function OrderSummary({
             >
               {/* Imagen */}
               <img
-                src={item.eventImage}
-                alt={item.eventTitle}
+                src={item.event.imageUrl}
+                alt={item.event.title}
                 className="w-20 h-20 object-cover rounded-lg"
               />
 
               {/* Info */}
               <div className="flex-1">
                 <h3 className="text-white font-semibold text-sm mb-1">
-                  {item.eventTitle}
+                  {item.event.title}
                 </h3>
                 <p className="text-gray-400 text-xs mb-2">
                   {ticketTypeLabels[item.ticketType]} × {item.quantity}
                 </p>
                 <p className="text-red-500 font-bold text-sm">
-                  {item.totalPrice}€
+                  {(item.pricePerTicket * item.quantity).toFixed(2)}€
                 </p>
               </div>
 
               {/* Botón eliminar */}
               {onRemoveItem && (
                 <button
+                  type="button"
                   onClick={() => onRemoveItem(item.id)}
+                  aria-label={`Eliminar ${item.event.title}`}
                   className="text-gray-400 hover:text-red-500 transition-colors p-2"
                   title="Eliminar"
                 >

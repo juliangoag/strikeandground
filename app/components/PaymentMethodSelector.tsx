@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CreditCard, Calendar, Lock } from 'lucide-react';
 import { PaymentMethod } from '../types/checkout';
-import { availablePaymentMethods } from '../data/checkout-mocks';
+import { paymentMethodDetails } from '../data/checkout-mocks';
 
 interface PaymentMethodSelectorProps {
   selectedMethod: PaymentMethod | null;
@@ -42,10 +42,18 @@ export function PaymentMethodSelector({
 
       {/* Métodos de pago */}
       <div className="space-y-3">
-        {availablePaymentMethods.map((method) => (
+        {paymentMethodDetails.map((method) => (
           <div
             key={method.type}
             onClick={() => handleMethodSelect(method.type)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleMethodSelect(method.type);
+              }
+            }}
+            aria-label={`Seleccionar ${method.name}`}
             className={`
               relative p-4 rounded-lg border-2 cursor-pointer transition-all
               ${

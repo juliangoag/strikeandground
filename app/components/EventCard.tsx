@@ -67,10 +67,12 @@ export function EventCard({ event }: EventCardProps) {
               <span className="text-white text-lg font-bold">Desde {event.price}€</span>
             </div>
             <button 
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 window.location.href = `/eventos/${event.id}/details`;
               }}
+              aria-label={`Ver detalles de ${event.title}`}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-semibold"
             >
               Ver Detalles

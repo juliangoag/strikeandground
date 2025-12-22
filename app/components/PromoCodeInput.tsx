@@ -31,7 +31,7 @@ export function PromoCodeInput({ onApply, appliedCode, onRemove }: PromoCodeInpu
     );
 
     if (promoCode) {
-      onApply(promoCode.code, promoCode.discount);
+      onApply(promoCode.code, promoCode.discountPercent);
       setCode('');
       setError('');
     } else {
@@ -61,7 +61,9 @@ export function PromoCodeInput({ onApply, appliedCode, onRemove }: PromoCodeInpu
           </div>
           {onRemove && (
             <button
+              type="button"
               onClick={onRemove}
+              aria-label="Eliminar código promocional"
               className="text-gray-400 hover:text-red-500 transition-colors p-2"
               title="Eliminar código"
             >
@@ -97,8 +99,10 @@ export function PromoCodeInput({ onApply, appliedCode, onRemove }: PromoCodeInpu
           disabled={loading}
         />
         <button
+          type="button"
           onClick={handleApply}
           disabled={loading || !code.trim()}
+          aria-label="Aplicar código promocional"
           className="bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-colors font-semibold"
         >
           {loading ? 'Validando...' : 'Aplicar'}
@@ -114,10 +118,12 @@ export function PromoCodeInput({ onApply, appliedCode, onRemove }: PromoCodeInpu
           {promoCodes.map((promo) => (
             <button
               key={promo.code}
+              type="button"
               onClick={() => {
                 setCode(promo.code);
                 setError('');
               }}
+              aria-label={`Usar código ${promo.code}`}
               className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded transition-colors"
             >
               {promo.code}

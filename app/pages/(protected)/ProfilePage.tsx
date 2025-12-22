@@ -1,8 +1,6 @@
 // Página de Perfil de Usuario
 import { useState } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
-import { Header } from '../../components/Header';
-import { Footer } from '../../components/Footer';
 import { AvatarUploadModal } from '../../auth/components/AvatarUploadModal';
 import { User, Mail, Calendar, CheckCircle, Edit2, Save, X, Camera } from 'lucide-react';
 
@@ -63,10 +61,7 @@ export function ProfilePage() {
   });
 
   return (
-    <div className="min-h-screen bg-black">
-      <Header />
-
-      <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
@@ -239,18 +234,15 @@ export function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {/* Avatar Upload Modal */}
+        <AvatarUploadModal
+          isOpen={showAvatarModal}
+          onClose={() => setShowAvatarModal(false)}
+          onUpload={handleAvatarUpload}
+          currentAvatar={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
+        />
       </div>
-
-      <Footer />
-
-      {/* Avatar Upload Modal */}
-      <AvatarUploadModal
-        isOpen={showAvatarModal}
-        onClose={() => setShowAvatarModal(false)}
-        onUpload={handleAvatarUpload}
-        currentAvatar={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`}
-      />
-    </div>
   );
 }
 

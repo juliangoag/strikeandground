@@ -73,7 +73,7 @@ export function CheckoutPage() {
 
     try {
       // Simular procesamiento de pago
-      const paymentResult = await mockCheckoutService.simulatePayment(total);
+      const paymentResult = await mockCheckoutService.simulatePayment();
 
       if (!paymentResult.success) {
         setError(paymentResult.message);
@@ -91,7 +91,6 @@ export function CheckoutPage() {
         discount,
         total,
         promoCode,
-        status: 'completed',
       });
 
       setOrderId(order.id);
@@ -198,7 +197,7 @@ export function CheckoutPage() {
                   initialData={
                     user
                       ? {
-                          name: user.name,
+                          fullName: user.name,
                           email: user.email,
                           phone: '',
                           address: '',
@@ -311,7 +310,7 @@ export function CheckoutPage() {
                     <h3 className="text-white font-semibold mb-2">
                       Información de Contacto
                     </h3>
-                    <p className="text-gray-400 text-sm">{shippingInfo?.name}</p>
+                    <p className="text-gray-400 text-sm">{shippingInfo?.fullName}</p>
                     <p className="text-gray-400 text-sm">{shippingInfo?.email}</p>
                     <p className="text-gray-400 text-sm">{shippingInfo?.phone}</p>
                   </div>

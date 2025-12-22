@@ -8,6 +8,27 @@ export const paymentMethodLabels: Record<PaymentMethodType, string> = {
   bizum: 'Bizum',
 };
 
+export const paymentMethodDetails = [
+  {
+    type: 'card' as PaymentMethodType,
+    name: 'Tarjeta de Crédito/Débito',
+    icon: '💳',
+    description: 'Visa, Mastercard, American Express',
+  },
+  {
+    type: 'paypal' as PaymentMethodType,
+    name: 'PayPal',
+    icon: '🅿️',
+    description: 'Paga con tu cuenta de PayPal',
+  },
+  {
+    type: 'bizum' as PaymentMethodType,
+    name: 'Bizum',
+    icon: '📱',
+    description: 'Pago instantáneo con Bizum',
+  },
+];
+
 export const promoCodes: PromoCode[] = [
   {
     code: 'PROMO10',
