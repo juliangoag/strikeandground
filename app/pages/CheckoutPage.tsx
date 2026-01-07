@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ChevronRight, Home, CheckCircle, Loader } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../auth/context/AuthContext';
-import { OrderSummary } from '../components/OrderSummary';
-import { ShippingForm } from '../components/ShippingForm';
-import { PaymentMethodSelector } from '../components/PaymentMethodSelector';
-import { PromoCodeInput } from '../components/PromoCodeInput';
-import { ShippingInfo, PaymentMethod } from '../types/checkout';
-import { mockCheckoutService } from '../services/mockCheckoutService';
+import { useCart } from '../providers/CartProvider';
+import { useAuth } from '../providers/AuthProvider';
+import { OrderSummary } from '../components/checkout/OrderSummary';
+import { ShippingForm } from '../components/checkout/ShippingForm';
+import { PaymentMethodSelector } from '../components/checkout/PaymentMethodSelector';
+import { PromoCodeInput } from '../components/checkout/PromoCodeInput';
+import { ShippingInfo, PaymentMethod } from '../lib/checkout/types';
+import { mockCheckoutService } from '../lib/checkout/services/mockCheckoutService';
 
 type Step = 1 | 2 | 3;
 
@@ -26,6 +26,7 @@ export function CheckoutPage() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [finalTotal, setFinalTotal] = useState<number>(0);
 
   // Redirigir si el carrito está vacío
   useEffect(() => {
@@ -63,6 +64,14 @@ export function CheckoutPage() {
       return;
     }
 
+    // Validar datos de tarjeta si es el método seleccionado
+    if (paymentMethod.type === 'card') {
+      if (!paymentMethod.cardDetails) {
+        setError('Por favor completa los datos de la tarjeta correctamente');
+        return;
+      }
+    }
+
     if (!acceptedTerms) {
       setError('Debes aceptar los términos y condiciones');
       return;
@@ -80,6 +89,9 @@ export function CheckoutPage() {
         setProcessing(false);
         return;
       }
+
+      // Guardar el total ANTES de limpiar el carrito
+      setFinalTotal(total);
 
       // Crear orden
       const order = await mockCheckoutService.createOrder({
@@ -318,7 +330,7 @@ export function CheckoutPage() {
                   <div className="text-left bg-black/30 rounded-lg p-4">
                     <h3 className="text-white font-semibold mb-2">Total Pagado</h3>
                     <p className="text-red-500 text-2xl font-bold">
-                      {total.toFixed(2)}€
+                      {finalTotal.toFixed(2)}€
                     </p>
                   </div>
                 </div>

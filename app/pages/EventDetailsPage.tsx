@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Calendar, MapPin, Tag, Clock, Users, ArrowLeft, Ticket, ShoppingCart, CheckCircle } from 'lucide-react';
-import { upcomingEvents } from '../data/events';
-import { useCart } from '../context/CartContext';
+import { upcomingEvents } from '../lib/events/data';
+import { useCart } from '../providers/CartProvider';
 
 const categoryLabels = {
   MMA: 'MMA',

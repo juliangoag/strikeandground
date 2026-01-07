@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './auth/context/AuthContext';
-import { CartProvider } from './context/CartContext';
-import { ProtectedRoute } from './auth/components/ProtectedRoute';
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import { AuthProvider } from './providers/AuthProvider';
+import { CartProvider } from './providers/CartProvider';
+import { ProtectedRoute } from './lib/auth/components/ProtectedRoute';
+import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
 import { EventDetailsPage } from './pages/EventDetailsPage';

@@ -1,7 +1,7 @@
 // Página de Perfil de Usuario
 import { useState } from 'react';
-import { useAuth } from '../../auth/context/AuthContext';
-import { AvatarUploadModal } from '../../auth/components/AvatarUploadModal';
+import { useAuth } from '../../providers/AuthProvider';
+import { AvatarUploadModal } from '../../lib/auth/components/AvatarUploadModal';
 import { User, Mail, Calendar, CheckCircle, Edit2, Save, X, Camera } from 'lucide-react';
 
 export function ProfilePage() {

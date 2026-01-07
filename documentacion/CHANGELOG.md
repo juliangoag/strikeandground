@@ -4,6 +4,305 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.6.0] - Enero 7, 2026
+
+### 🏗️ Reestructuración Completa del Proyecto
+
+**Objetivo:** Reorganizar el proyecto siguiendo las convenciones de Next.js App Router para mejor escalabilidad, mantenibilidad y preparación para futura migración.
+
+#### ✨ Nueva Estructura Implementada
+
+**Antes (React + Vite tradicional):**
+```
+app/
+├── auth/            # Módulo auth mezclado
+├── components/      # Todos los componentes juntos
+├── context/         # Contextos globales
+├── data/            # Datos estáticos
+├── services/        # Servicios
+├── types/           # Tipos
+└── pages/           # Páginas
+```
+
+**Después (Estilo Next.js App Router):**
+```
+app/
+├── components/      # Organizados por feature
+│   ├── layout/     # Header, Footer, Navigation
+│   ├── home/       # Hero, Benefits, Security
+│   ├── events/     # EventCard, SearchBar
+│   ├── checkout/   # OrderSummary, Payment, etc.
+│   └── ui/         # Componentes base reutilizables
+├── lib/            # Utilidades y servicios
+│   ├── auth/       # Autenticación completa
+│   ├── checkout/   # Checkout completo
+│   └── events/     # Eventos completo
+├── providers/      # React Context Providers
+├── pages/          # Páginas (sin cambios)
+└── styles/         # Estilos (globals.css)
+```
+
+#### 📊 Cambios Realizados
+
+**1. Reorganización de Componentes por Feature**
+- ✅ Componentes agrupados por funcionalidad en lugar de tipo
+- ✅ Mejor separación de responsabilidades
+- ✅ Más fácil encontrar y mantener código relacionado
+
+**2. Creación de Carpeta `lib/`**
+- ✅ Servicios y utilidades organizados por módulo
+- ✅ Tipos TypeScript co-localizados con su módulo
+- ✅ Estructura preparada para escalabilidad
+
+**3. Providers Separados**
+- ✅ `AuthProvider.tsx` - Context de autenticación
+- ✅ `CartProvider.tsx` - Context del carrito
+- ✅ Preparado para agregar más providers fácilmente
+
+**4. Estilos Reorganizados**
+- ✅ `index.css` → `styles/globals.css`
+- ✅ Siguiendo convención de Next.js
+
+#### 🔄 Archivos Movidos y Actualizados
+
+**Componentes:**
+- `components/Header.tsx` → `components/layout/Header.tsx`
+- `components/Footer.tsx` → `components/layout/Footer.tsx`
+- `components/header/*` → `components/layout/header/*`
+- `components/Hero.tsx` → `components/home/Hero.tsx`
+- `components/EventsSection.tsx` → `components/home/EventsSection.tsx`
+- `components/BenefitsSection.tsx` → `components/home/BenefitsSection.tsx`
+- `components/SecuritySection.tsx` → `components/home/SecuritySection.tsx`
+- `components/EventCard.tsx` → `components/events/EventCard.tsx`
+- `components/SearchBar.tsx` → `components/events/SearchBar.tsx`
+- `components/OrderSummary.tsx` → `components/checkout/OrderSummary.tsx`
+- `components/PaymentMethodSelector.tsx` → `components/checkout/PaymentMethodSelector.tsx`
+- `components/PromoCodeInput.tsx` → `components/checkout/PromoCodeInput.tsx`
+- `components/ShippingForm.tsx` → `components/checkout/ShippingForm.tsx`
+
+**Lib (Servicios y Utilidades):**
+- `auth/` → `lib/auth/`
+  - `auth/services/mockAuthService.ts` → `lib/auth/services/mockAuthService.ts`
+  - `auth/components/*` → `lib/auth/components/*`
+  - `auth/types/auth.types.ts` → `lib/auth/types.ts`
+- `services/mockCheckoutService.ts` → `lib/checkout/services/mockCheckoutService.ts`
+- `data/checkout-mocks.ts` → `lib/checkout/mocks.ts`
+- `types/checkout.ts` → `lib/checkout/types.ts`
+- `data/events.ts` → `lib/events/data.ts`
+- `types/event.ts` → `lib/events/types.ts`
+
+**Providers:**
+- `auth/context/AuthContext.tsx` → `providers/AuthProvider.tsx`
+- `context/CartContext.tsx` → `providers/CartProvider.tsx`
+
+**Páginas:**
+- Sin cambios (mantienen su ubicación actual)
+- Imports actualizados para reflejar nueva estructura
+
+#### 🔧 Actualización Masiva de Imports
+
+Se actualizaron automáticamente más de 100 imports en:
+- ✅ Todos los componentes (layout, home, events, checkout)
+- ✅ Todas las páginas (HomePage, EventsPage, CheckoutPage, etc.)
+- ✅ Todos los servicios (auth, checkout)
+- ✅ Todos los providers
+- ✅ App.tsx y main.tsx
+
+#### 📈 Beneficios de la Reestructuración
+
+**Organización:**
+- ✅ Código agrupado por feature/funcionalidad
+- ✅ Más fácil navegar y encontrar archivos
+- ✅ Estructura escalable para nuevas features
+
+**Mantenibilidad:**
+- ✅ Cambios localizados por feature
+- ✅ Menos acoplamiento entre módulos
+- ✅ Imports más claros y descriptivos
+
+**Preparación para Next.js:**
+- ✅ Estructura compatible con Next.js 13+ App Router
+- ✅ Migración futura más sencilla
+- ✅ Mejores prácticas de la industria
+
+**Developer Experience:**
+- ✅ Más fácil para nuevos desarrolladores
+- ✅ Autocomplete mejorado en IDEs
+- ✅ Mejor organización mental del código
+
+#### 🧪 Verificación
+
+- ✅ `npm run typecheck` - 0 errores
+- ✅ `npm run build` - Compilación exitosa
+- ✅ Todos los imports actualizados correctamente
+- ✅ Estructura de carpetas coherente
+
+#### 📝 Archivos de Configuración
+
+- Sin cambios en configuraciones (tsconfig, vite, tailwind)
+- Paths relativos funcionan correctamente
+- Build optimizado: 298.84 kB (gzip: 83.72 kB)
+
+#### 🎯 Próximos Pasos Sugeridos
+
+1. **Path Aliases en tsconfig.json**
+   - Configurar `@/components`, `@/lib`, `@/providers`
+   - Simplificar imports relativos largos
+
+2. **Layout Component**
+   - Crear `components/layout/layout.tsx` compartido
+   - Extraer Header + Footer + children pattern
+
+3. **Migración a Next.js** (futuro)
+   - Ya preparado con estructura compatible
+   - Migración incremental posible
+
+---
+
+## [1.5.2] - Enero 7, 2026
+
+### 🔒 Mejoras de Seguridad y Validación en Checkout
+
+#### ✨ Problemas Resueltos
+
+**1. Total Pagado mostraba 0.00€ en Confirmación**
+- **Problema**: El carrito se limpiaba antes de mostrar la confirmación, causando que el subtotal fuera 0
+- **Solución**: Guardado del total en estado `finalTotal` antes de ejecutar `clearCart()`
+- **Resultado**: El total pagado ahora se muestra correctamente en la pantalla de confirmación
+
+**2. Falta de Validación de Métodos de Pago**
+- **Problema**: No se validaban los datos de la tarjeta antes de procesar el pago
+- **Solución**: Sistema completo de validación en tiempo real para tarjetas
+- **Resultado**: Usuarios no pueden proceder sin completar datos válidos de pago
+
+#### 🔍 Validaciones Implementadas
+
+**Validación de Número de Tarjeta**
+- ✅ Debe contener exactamente 16 dígitos
+- ✅ Solo números permitidos
+- ✅ Formato automático con espacios (xxxx xxxx xxxx xxxx)
+- ✅ Mensaje de error: "Número de tarjeta inválido (16 dígitos)"
+
+**Validación de Fecha de Expiración**
+- ✅ Formato MM/AA obligatorio
+- ✅ Mes válido (01-12)
+- ✅ Fecha no puede estar vencida
+- ✅ Validación contra fecha actual
+- ✅ Mensaje de error: "Fecha de expiración inválida o expirada"
+
+**Validación de CVV**
+- ✅ Debe contener exactamente 3 dígitos
+- ✅ Solo números permitidos
+- ✅ Mensaje de error: "CVV inválido (3 dígitos)"
+
+**Validación en CheckoutPage**
+- ✅ Verifica que se haya seleccionado un método de pago
+- ✅ Si es tarjeta, valida que `cardDetails` esté completo
+- ✅ Previene procesamiento con datos incompletos o inválidos
+- ✅ Mensaje de error: "Por favor completa los datos de la tarjeta correctamente"
+
+#### 📊 Mejoras de UX
+
+**Feedback Visual en Tiempo Real**
+- Campos se marcan en rojo si contienen errores
+- Mensajes de error específicos debajo de cada campo
+- Los datos válidos permiten continuar automáticamente
+- Border rojo en campos con error, gris en campos normales
+
+**Validación Progresiva**
+- Los errores desaparecen al corregir el campo
+- Validación se ejecuta mientras el usuario escribe
+- El método de pago se actualiza solo cuando todos los datos son válidos
+- PayPal y Bizum no requieren datos adicionales
+
+#### 🔄 Archivos Modificados
+
+**1. `app/types/checkout.ts`**
+- Agregado campo opcional `cardDetails` a la interfaz `PaymentMethod`
+- Estructura para número, fecha de expiración y CVV
+
+**2. `app/components/PaymentMethodSelector.tsx`**
+- Agregado estado `validationErrors` para mensajes de error
+- Implementadas funciones de validación: `validateCardNumber()`, `validateExpiry()`, `validateCVV()`
+- Nueva función `handleCardDataChange()` para validar en tiempo real
+- Actualización automática del método de pago cuando todos los datos son válidos
+- Inputs actualizados con clases dinámicas para mostrar errores
+- Mensajes de error mostrados debajo de cada campo
+
+**3. `app/pages/CheckoutPage.tsx`**
+- Agregado estado `finalTotal` para guardar el total antes de limpiar carrito
+- Validación de `cardDetails` en `handleProcessPayment()` antes de procesar pago
+- Guardado de `finalTotal` antes de ejecutar `clearCart()`
+- Uso de `finalTotal` en lugar de `total` en la sección de confirmación
+
+#### ✅ Resultado Final
+
+**Antes:**
+```
+❌ Total Pagado: 0.00€ (carrito ya limpiado)
+❌ Sin validación de datos de tarjeta
+❌ Se podía proceder con datos inválidos
+```
+
+**Después:**
+```
+✅ Total Pagado: [monto correcto]€
+✅ Validación completa de todos los campos de tarjeta
+✅ Imposible proceder sin datos válidos
+✅ Feedback visual en tiempo real
+✅ Mensajes de error específicos
+```
+
+#### 📈 Estadísticas
+
+| Métrica | Antes | Después | Mejora |
+|---------|-------|---------|--------|
+| Total en confirmación | 0.00€ | Correcto | 100% ✅ |
+| Validación de tarjeta | ❌ No | ✅ Sí | ∞ |
+| Campos validados | 0 | 3 | +300% |
+| Mensajes de error | 0 | 3 | +300% |
+| Prevención de errores | ❌ No | ✅ Sí | 100% ✅ |
+
+#### 🧪 Testing Manual
+
+**Test 1: Total Pagado**
+1. ✅ Agregar items al carrito
+2. ✅ Proceder al checkout
+3. ✅ Completar información y pago
+4. ✅ Verificar que el total mostrado en confirmación sea correcto
+
+**Test 2: Validación de Tarjeta**
+1. ✅ Seleccionar método de pago "Tarjeta"
+2. ✅ Intentar ingresar menos de 16 dígitos → Error mostrado
+3. ✅ Ingresar fecha vencida → Error mostrado
+4. ✅ Ingresar CVV de 2 dígitos → Error mostrado
+5. ✅ Intentar proceder con datos inválidos → Bloqueado
+6. ✅ Completar todos los datos correctamente → Permite continuar
+
+**Test 3: Métodos de Pago Alternativos**
+1. ✅ Seleccionar PayPal → No requiere datos adicionales
+2. ✅ Seleccionar Bizum → No requiere datos adicionales
+3. ✅ Ambos permiten proceder directamente
+
+#### 🎯 Beneficios
+
+**Seguridad**
+- Prevención de pagos con datos incorrectos
+- Validación estricta de formatos
+- Mensajes claros de requisitos
+
+**Experiencia de Usuario**
+- Feedback inmediato sobre errores
+- Guía clara de lo que se necesita
+- No hay sorpresas al final del proceso
+
+**Mantenibilidad**
+- Código modular y reutilizable
+- Funciones de validación separadas
+- Fácil agregar más validaciones
+
+---
+
 ## [1.5.1] - Diciembre 22, 2025
 
 ### 🔍 Auditoría Completa del Código

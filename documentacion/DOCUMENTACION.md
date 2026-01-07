@@ -79,65 +79,84 @@ Deploy:
 
 ### Estructura de Archivos Completa
 
+**NOTA:** Reestructurada el 7 de enero de 2026 siguiendo convenciones de Next.js App Router
+
 ```
 project/
 │
 ├── 📂 app/                           # Código fuente de la aplicación
-│   ├── 📂 auth/                      # Módulo de autenticación
-│   │   ├── 📂 components/            # Componentes de autenticación
-│   │   │   ├── AuthModal.tsx         # Modal principal con tabs
-│   │   │   ├── LoginForm.tsx         # Formulario de login
-│   │   │   ├── RegisterForm.tsx      # Formulario de registro
-│   │   │   ├── ForgotPasswordForm.tsx # Recuperación de contraseña
-│   │   │   ├── ProtectedRoute.tsx    # HOC para rutas protegidas
-│   │   │   └── AvatarUploadModal.tsx # Upload de foto de perfil
-│   │   ├── 📂 context/
-│   │   │   └── AuthContext.tsx       # Context + Provider + useAuth
-│   │   ├── 📂 services/
-│   │   │   └── mockAuthService.ts    # Lógica MOCK completa
-│   │   └── 📂 types/
-│   │       └── auth.types.ts         # Tipos TypeScript
 │   │
-│   ├── 📂 components/                # Componentes globales
-│   │   ├── Header.tsx                # Navegación principal
-│   │   ├── Hero.tsx                  # Sección hero
-│   │   ├── EventsSection.tsx         # Sección de eventos destacados
-│   │   ├── EventCard.tsx             # Tarjeta de evento
-│   │   ├── SearchBar.tsx             # Barra de búsqueda de eventos
-│   │   ├── BenefitsSection.tsx       # Beneficios
-│   │   ├── SecuritySection.tsx       # Seguridad
-│   │   ├── Footer.tsx                # Pie de página
-│   │   ├── OrderSummary.tsx          # Resumen de orden (checkout)
-│   │   ├── PaymentMethodSelector.tsx # Selector de método de pago
-│   │   ├── PromoCodeInput.tsx        # Input de código promocional
-│   │   └── ShippingForm.tsx          # Formulario de información de envío
+│   ├── 📂 components/                # Componentes organizados por feature
+│   │   ├── 📂 layout/                # Componentes de layout
+│   │   │   ├── Header.tsx            # Navegación principal
+│   │   │   ├── Footer.tsx            # Pie de página
+│   │   │   ├── 📂 header/            # Subcomponentes del header
+│   │   │   │   ├── AuthButtons.tsx   # Botones de autenticación
+│   │   │   │   ├── CartDropdown.tsx  # Dropdown del carrito
+│   │   │   │   ├── NavLinks.tsx      # Enlaces de navegación
+│   │   │   │   └── UserMenu.tsx      # Menú de usuario
+│   │   │   └── layout.tsx            # Layout wrapper (futuro)
+│   │   │
+│   │   ├── 📂 home/                  # Componentes de la home
+│   │   │   ├── Hero.tsx              # Sección hero
+│   │   │   ├── EventsSection.tsx     # Eventos destacados
+│   │   │   ├── BenefitsSection.tsx   # Beneficios
+│   │   │   └── SecuritySection.tsx   # Seguridad
+│   │   │
+│   │   ├── 📂 events/                # Componentes de eventos
+│   │   │   ├── EventCard.tsx         # Tarjeta de evento
+│   │   │   └── SearchBar.tsx         # Barra de búsqueda
+│   │   │
+│   │   ├── 📂 checkout/              # Componentes de checkout
+│   │   │   ├── OrderSummary.tsx      # Resumen de orden
+│   │   │   ├── PaymentMethodSelector.tsx # Selector de pago
+│   │   │   ├── PromoCodeInput.tsx    # Código promocional
+│   │   │   └── ShippingForm.tsx      # Formulario de envío
+│   │   │
+│   │   └── 📂 ui/                    # Componentes UI base
+│   │       └── Overlay.tsx           # Overlay reutilizable
 │   │
-│   ├── 📂 context/                   # Contextos globales
-│   │   └── CartContext.tsx           # Context del carrito de compras
+│   ├── 📂 lib/                       # Utilidades y servicios
+│   │   ├── 📂 auth/                  # Módulo de autenticación
+│   │   │   ├── 📂 components/        # Componentes específicos de auth
+│   │   │   │   ├── AuthModal.tsx     # Modal principal
+│   │   │   │   ├── LoginForm.tsx     # Formulario de login
+│   │   │   │   ├── RegisterForm.tsx  # Formulario de registro
+│   │   │   │   ├── ForgotPasswordForm.tsx # Recuperación
+│   │   │   │   ├── ProtectedRoute.tsx # HOC rutas protegidas
+│   │   │   │   └── AvatarUploadModal.tsx # Upload avatar
+│   │   │   ├── 📂 services/
+│   │   │   │   └── mockAuthService.ts # Lógica MOCK auth
+│   │   │   └── types.ts              # Tipos de autenticación
+│   │   │
+│   │   ├── 📂 checkout/              # Módulo de checkout
+│   │   │   ├── 📂 services/
+│   │   │   │   └── mockCheckoutService.ts # Lógica MOCK checkout
+│   │   │   ├── mocks.ts              # Datos MOCK de checkout
+│   │   │   └── types.ts              # Tipos de checkout
+│   │   │
+│   │   └── 📂 events/                # Módulo de eventos
+│   │       ├── data.ts               # Datos de eventos
+│   │       └── types.ts              # Tipos de eventos
+│   │
+│   ├── 📂 providers/                 # React Context Providers
+│   │   ├── AuthProvider.tsx          # Provider de autenticación
+│   │   └── CartProvider.tsx          # Provider del carrito
 │   │
 │   ├── 📂 pages/                     # Páginas de la aplicación
-│   │   ├── 📂 (protected)/           # Rutas protegidas (requieren auth)
+│   │   ├── 📂 (protected)/           # Rutas protegidas
 │   │   │   ├── ProfilePage.tsx       # Perfil de usuario
-│   │   │   └── SettingsPage.tsx      # Configuración de usuario
-│   │   ├── HomePage.tsx              # Landing page
-│   │   ├── EventsPage.tsx            # Catálogo completo de eventos
-│   │   ├── EventDetailsPage.tsx      # Detalles de evento individual
-│   │   └── CheckoutPage.tsx          # Proceso de checkout
+│   │   │   └── SettingsPage.tsx      # Configuración
+│   │   ├── HomePage.tsx              # Landing page (/)
+│   │   ├── EventsPage.tsx            # Catálogo (/eventos)
+│   │   ├── EventDetailsPage.tsx      # Detalles (/eventos/:id/details)
+│   │   └── CheckoutPage.tsx          # Checkout (/checkout)
 │   │
-│   ├── 📂 services/                  # Servicios y lógica de negocio
-│   │   └── mockCheckoutService.ts    # Servicio MOCK de órdenes
-│   │
-│   ├── 📂 data/                      # Datos estáticos
-│   │   ├── events.ts                 # Datos de eventos
-│   │   └── checkout-mocks.ts         # Datos MOCK de checkout
-│   │
-│   ├── 📂 types/                     # Definiciones TypeScript
-│   │   ├── event.ts                  # Tipos de eventos
-│   │   └── checkout.ts               # Tipos de checkout
+│   ├── 📂 styles/                    # Estilos
+│   │   └── globals.css               # Estilos globales (antes index.css)
 │   │
 │   ├── App.tsx                       # Componente raíz + Router
 │   ├── main.tsx                      # Entry point
-│   ├── index.css                     # Estilos globales
 │   └── vite-env.d.ts                 # Tipos de Vite
 │
 ├── 📂 documentacion/                 # 📚 Documentación del proyecto
@@ -1862,19 +1881,58 @@ Componentes: `PaymentMethodSelector`, `PromoCodeInput`
 - Checkbox requerido antes de proceder
 - No se puede procesar el pago sin aceptar
 
+**Validación antes de Procesar:**
+```typescript
+// Validación del método de pago
+if (!paymentMethod) {
+  setError('Selecciona un método de pago');
+  return;
+}
+
+// Validación de datos de tarjeta
+if (paymentMethod.type === 'card') {
+  if (!paymentMethod.cardDetails) {
+    setError('Por favor completa los datos de la tarjeta correctamente');
+    return;
+  }
+}
+
+// Validación de términos
+if (!acceptedTerms) {
+  setError('Debes aceptar los términos y condiciones');
+  return;
+}
+```
+
 #### Paso 3: Confirmación
 
 **Procesamiento del Pago:**
-1. Loading state (3 segundos)
-2. Simulación de pago (90% éxito)
-3. Si exitoso → Crear orden y mostrar confirmación
-4. Si rechazado → Mostrar error y permitir reintentar
+1. Validación de todos los datos requeridos
+2. Loading state (3 segundos)
+3. Simulación de pago (90% éxito)
+4. **Guardado del total en `finalTotal` antes de limpiar carrito**
+5. Creación de la orden en localStorage
+6. Limpieza del carrito con `clearCart()`
+7. Navegación al paso 3 (confirmación)
 
-**Información Mostrada:**
+**Importante - Prevención del Bug de Total en 0:**
+```typescript
+// CORRECTO: Guardar total ANTES de clearCart()
+setFinalTotal(total);  // ← Guardado del total calculado
+clearCart();           // ← Limpia carrito (subtotal → 0)
+setCurrentStep(3);     // ← Muestra confirmación
+
+// En confirmación, usar finalTotal en lugar de total
+<p>{finalTotal.toFixed(2)}€</p>  // ← Muestra total correcto
+```
+
+Sin este guardado previo, el `total` calculado dinámicamente se volvería 0 al limpiar el carrito, causando que la confirmación muestre "Total Pagado: 0.00€".
+
+**Información Mostrada en Confirmación:**
 - Icono de éxito
 - Número de orden único
 - Resumen de información de contacto
-- Total pagado
+- **Total pagado (usando `finalTotal`)**
 - Botones de acción: "Ver Mis Entradas" y "Volver al Inicio"
 
 ### Componentes del Checkout
@@ -1934,9 +1992,49 @@ Componentes: `PaymentMethodSelector`, `PromoCodeInput`
 **Funcionalidad:**
 - Cards seleccionables para cada método
 - Formulario condicional para tarjeta
-- Formateo automático de número de tarjeta
-- Formateo automático de fecha de expiración
-- Validación visual
+- Formateo automático de número de tarjeta (xxxx xxxx xxxx xxxx)
+- Formateo automático de fecha de expiración (MM/AA)
+- **Validación en tiempo real de datos de tarjeta**
+- Feedback visual inmediato con errores
+- Mensajes de error específicos por campo
+
+**Sistema de Validación:**
+
+```typescript
+// Validación de número de tarjeta
+validateCardNumber(number: string): boolean
+- Debe contener exactamente 16 dígitos
+- Solo números permitidos
+- Formato automático con espacios
+
+// Validación de fecha de expiración
+validateExpiry(expiry: string): boolean
+- Formato MM/AA obligatorio
+- Mes válido (01-12)
+- Fecha no puede estar vencida
+- Validación contra fecha actual
+
+// Validación de CVV
+validateCVV(cvv: string): boolean
+- Debe contener exactamente 3 dígitos
+- Solo números permitidos
+```
+
+**Estados de Validación:**
+- `validationErrors`: Objeto con mensajes de error por campo
+- Actualización automática al escribir
+- Limpieza de errores al corregir
+- Border rojo en campos con error
+- Mensajes mostrados debajo de cada campo
+
+**Flujo de Validación:**
+1. Usuario selecciona método "Tarjeta"
+2. Aparece formulario de datos
+3. Usuario escribe en campos
+4. Validación en tiempo real mientras escribe
+5. Si todos los datos son válidos → `cardDetails` se agregan al `PaymentMethod`
+6. Si hay errores → Muestra mensajes y previene continuar
+7. PayPal y Bizum no requieren datos adicionales
 
 #### PromoCodeInput
 

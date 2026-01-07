@@ -1,8 +1,8 @@
 // Página Principal - Landing Page
-import { Hero } from '../components/Hero';
-import { EventsSection } from '../components/EventsSection';
-import { BenefitsSection } from '../components/BenefitsSection';
-import { SecuritySection } from '../components/SecuritySection';
+import { Hero } from '../components/home/Hero';
+import { EventsSection } from '../components/home/EventsSection';
+import { BenefitsSection } from '../components/home/BenefitsSection';
+import { SecuritySection } from '../components/home/SecuritySection';
 
 export function HomePage() {
   return (

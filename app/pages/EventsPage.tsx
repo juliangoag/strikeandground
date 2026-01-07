@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { SearchBar, SearchFilters } from '../components/SearchBar';
-import { EventCard } from '../components/EventCard';
-import { upcomingEvents } from '../data/events';
+import { SearchBar, SearchFilters } from '../components/events/SearchBar';
+import { EventCard } from '../components/events/EventCard';
+import { upcomingEvents } from '../lib/events/data';
 
 export function EventsPage() {
   const [filters, setFilters] = useState<SearchFilters>({
