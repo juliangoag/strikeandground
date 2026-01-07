@@ -10,6 +10,8 @@ import { EventDetailsPage } from './pages/EventDetailsPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { ProfilePage } from './pages/(protected)/ProfilePage';
 import { SettingsPage } from './pages/(protected)/SettingsPage';
+import { MyOrdersPage } from './pages/(protected)/MyOrdersPage';
+import { TicketsPage } from './pages/(protected)/TicketsPage';
 
 function App() {
   return (
@@ -36,6 +38,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SettingsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/orders"
+                element={
+                  <ProtectedRoute>
+                    <MyOrdersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tickets/:orderId"
+                element={
+                  <ProtectedRoute>
+                    <TicketsPage />
                   </ProtectedRoute>
                 }
               />

@@ -337,7 +337,7 @@ export function CheckoutPage() {
 
                 <div className="flex gap-4">
                   <Link
-                    to="/profile"
+                    to={`/profile/orders?order=${orderId}`}
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition-colors text-center"
                   >
                     Ver Mis Entradas

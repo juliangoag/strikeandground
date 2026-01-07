@@ -18,3 +18,46 @@
     opacity: 1;
   }
 }
+
+/* Estilos para impresión de tickets */
+@media print {
+  /* Ocultar elementos no necesarios en impresión */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ocultar navegación, header, footer */
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  /* Resetear fondo para impresión */
+  body {
+    background: white !important;
+  }
+
+  /* Optimizar página para A4 */
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+
+  /* Asegurar que el ticket se imprima correctamente */
+  .ticket-container {
+    page-break-inside: avoid;
+    page-break-after: always;
+  }
+
+  /* Convertir colores a escala de grises para mejor impresión */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+
+  /* Mantener colores del QR code */
+  img {
+    filter: none !important;
+  }
+}

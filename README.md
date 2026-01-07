@@ -77,14 +77,34 @@ Password: Demo123!
   - Almacenamiento de órdenes en localStorage
   - Notificaciones toast al agregar al carrito
 
+- **Gestión de Órdenes**
+  - Página "Mis Órdenes" completa
+  - Listado de todas las compras del usuario
+  - Estadísticas de compras (total gastado, entradas, órdenes)
+  - Vista detallada de cada orden
+  - Estados de órdenes (Completada, Pendiente, Cancelada)
+  - Acceso rápido desde múltiples puntos de navegación
+
+- **Sistema de Entradas Digitales con QR**
+  - Generación automática de tickets al completar compra
+  - Un ticket por cada entrada comprada
+  - Código QR único por ticket
+  - Vista de entrada digital profesional
+  - Diseño optimizado para impresión
+  - Descarga de entradas individuales o múltiples
+  - Sistema de validación de tickets (MOCK)
+  - Detección de tickets ya usados
+  - Firma de seguridad en cada ticket
+  - Historial de validaciones
+
 ### Pendiente ⚠️
 
 - Backend real (actualmente usa localStorage)
 - Pasarela de pago real (Stripe/PayPal)
-- Panel de administración
-- Generación de entradas con QR
-- Página "Mis Órdenes" en perfil de usuario
+- Panel de administración completo
+- Scanner de QR con cámara web
 - Sistema de notificaciones en tiempo real
+- Integración con email service
 
 ## 🎯 Stack Tecnológico
 
@@ -95,6 +115,7 @@ Frontend:
 ├── React Router 7.x       # Navegación
 ├── Tailwind CSS 3.4.1     # Estilos
 ├── Lucide React 0.344.0   # Iconos
+├── QRCode 1.5.x           # Generación de códigos QR
 └── Vite 5.4.2             # Build tool
 
 Backend (MOCK):
@@ -108,6 +129,8 @@ La documentación completa del proyecto está en la carpeta `documentacion/`:
 - 📘 [**Documentación Técnica**](documentacion/DOCUMENTACION.md) - Arquitectura, API y guías completas
 - 📝 [**Changelog**](documentacion/CHANGELOG.md) - Historial de cambios e implementaciones
 - 🎯 [**Milestone 1**](documentacion/Milestone-1.md) - Plan de implementación Checkout
+- 🎯 [**Milestone 2**](documentacion/Milestone-2.md) - Plan de implementación Mis Órdenes
+- 🎯 [**Milestone 5**](documentacion/Milestone-5.md) - Plan de implementación Entradas con QR
 
 ## 🎨 Rutas Disponibles
 
@@ -123,6 +146,8 @@ La documentación completa del proyecto está en la carpeta `documentacion/`:
 ```
 /profile               → Perfil de usuario
 /profile/settings      → Configuración de usuario
+/profile/orders        → Mis órdenes y compras
+/tickets/:orderId      → Entradas digitales con QR de una orden
 ```
 
 ## 🛠️ Comandos Disponibles
@@ -198,6 +223,8 @@ El carrito persiste en localStorage. Si se vació, puede ser que el navegador li
 🟢 Frontend:     100% completo
 🟢 Carrito:      100% funcional (MOCK)
 🟢 Checkout:     100% funcional (MOCK)
+🟢 Órdenes:      100% funcional (MOCK)
+🟢 Tickets/QR:   100% funcional (MOCK)
 🟡 Backend:      MOCK funcional
 🔴 Producción:   Requiere migración a backend real
 ```
@@ -208,9 +235,9 @@ El carrito persiste en localStorage. Si se vació, puede ser que el navegador li
 
 ---
 
-**Versión**: 1.5.1 (MOCK)  
-**Última actualización**: Diciembre 22, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional + Código 100% Auditado
+**Versión**: 1.8.0 (MOCK)  
+**Última actualización**: Enero 7, 2026  
+**Estado**: ✅ Sistema completo con Órdenes y Entradas Digitales con QR
 
 ---
 

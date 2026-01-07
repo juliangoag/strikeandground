@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { AvatarUploadModal } from '../../lib/auth/components/AvatarUploadModal';
-import { User, Mail, Calendar, CheckCircle, Edit2, Save, X, Camera } from 'lucide-react';
+import { User, Mail, Calendar, CheckCircle, Edit2, Save, X, Camera, ShoppingBag, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function ProfilePage() {
   const { user, updateProfile, verifyEmail } = useAuth();
@@ -203,6 +204,26 @@ export function ProfilePage() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Quick Links */}
+              <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-800 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">Accesos Rápidos</h3>
+                <Link
+                  to="/profile/orders"
+                  className="flex items-center justify-between p-4 bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-red-500 rounded-lg transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+                      <ShoppingBag className="w-5 h-5 text-red-500" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium">Mis Órdenes</p>
+                      <p className="text-sm text-gray-400">Ver historial de compras</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+                </Link>
               </div>
 
               {/* Stats */}

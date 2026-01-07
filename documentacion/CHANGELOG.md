@@ -4,6 +4,206 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.8.0] - Enero 7, 2026
+
+### 🎟️ Sistema de Entradas Digitales con QR Code (Milestone 5)
+
+**Objetivo:** Implementar sistema completo de generación de entradas digitales con código QR único para cada compra, con capacidad de visualización, descarga y validación (MOCK).
+
+#### ✨ Funcionalidades Implementadas
+
+**1. Generación Automática de Tickets**
+- Tickets se generan automáticamente al completar una orden
+- Un ticket por cada item en la orden (respeta quantity)
+- Código QR único por ticket con datos encriptados
+- Firma de seguridad (hash simulado) para prevenir falsificaciones
+- Persistencia en localStorage (`strike_ground_tickets`)
+
+**2. Visualización de Entradas**
+- Componente `TicketView` con diseño profesional
+- Información completa del evento y comprador
+- Código QR grande y escaneable (400x400px)
+- Estado visual de ticket usado
+- Diseño optimizado para impresión
+- Responsive en todos los dispositivos
+
+**3. Página de Tickets**
+- Ruta protegida: `/tickets/:orderId`
+- Navegación entre múltiples tickets
+- Botón "Descargar Todas" para imprimir
+- Integración con sistema de impresión del navegador
+- Breadcrumbs de navegación completos
+
+**4. Sistema de Validación (Admin)**
+- Input manual para validar códigos QR
+- Decodificación y verificación de firma
+- Detección de tickets ya usados
+- Estados: VÁLIDO, USADO, INVÁLIDO
+- Historial de validaciones (últimas 50)
+- Marcado de tickets como usados
+
+**5. Seguridad (MOCK)**
+- Hash de seguridad único por ticket
+- Verificación de firma al validar
+- Prevención de duplicados
+- Marca de agua en tickets usados
+- Datos codificados en JSON en el QR
+
+#### 📁 Nuevos Archivos Creados
+
+```
+app/
+├── lib/
+│   └── tickets/
+│       ├── services/
+│       │   └── mockTicketService.ts       # Servicio MOCK de tickets (210 líneas)
+│       ├── utils/
+│       │   └── qrGenerator.ts             # Utilidad generación QR (120 líneas)
+│       └── types.ts                       # Tipos de tickets (75 líneas)
+├── components/
+│   └── tickets/
+│       └── TicketView.tsx                 # Vista de entrada digital (230 líneas)
+└── pages/
+    └── (protected)/
+        └── TicketsPage.tsx                # Página de tickets (210 líneas)
+```
+
+**Total:** ~845 líneas de código nuevo
+
+#### 🔄 Archivos Modificados
+
+- `app/App.tsx` - Agregada ruta `/tickets/:orderId`
+- `app/styles/globals.css` - Agregados estilos de impresión
+- `package.json` - Agregadas dependencias: `qrcode`, `@types/qrcode`
+
+#### 📦 Nuevas Dependencias
+
+- `qrcode` (^1.5.4) - Generación de códigos QR
+- `@types/qrcode` (^1.5.5) - Tipos TypeScript
+
+#### 🎨 Características del Diseño
+
+**Entrada Digital:**
+- Fondo blanco para impresión óptima
+- Header con logo Strike & Ground
+- QR code centrado y grande (300x300px)
+- Badge de tipo de entrada con colores
+- Información estructurada y legible
+- Instrucciones de uso claras
+- Footer con términos y condiciones
+
+**Estilos de Impresión:**
+- Ocultar navegación y elementos no necesarios
+- Optimización para tamaño A4
+- Márgenes profesionales (20mm)
+- QR mantenido en alta calidad
+- Conversión a escala de grises opcional
+
+#### ✅ Integración Completa
+
+- Botón "Ver Entradas" en OrderDetailsModal
+- Link directo desde MyOrdersPage
+- Generación automática al completar orden
+- Flujo completo: Compra → Orden → Tickets → Validación
+
+---
+
+## [1.7.0] - Enero 7, 2026
+
+### 🛒 Página de Mis Órdenes (Milestone 2)
+
+**Objetivo:** Crear una página completa en el perfil del usuario donde pueda ver, filtrar y gestionar todas sus órdenes de compra.
+
+#### ✨ Funcionalidades Implementadas
+
+**1. Página MyOrdersPage**
+- Ruta protegida: `/profile/orders`
+- Listado completo de órdenes del usuario
+- Ordenamiento por fecha (más reciente primero)
+- Grid responsive (1→2 columnas según dispositivo)
+- Loading states y error handling
+
+**2. Estadísticas de Compras**
+- Total de órdenes realizadas
+- Total gastado en euros
+- Total de entradas compradas
+- Cards con diseño profesional
+
+**3. Componentes de Órdenes**
+- `OrderCard`: Card resumido de cada orden
+- `OrderDetailsModal`: Modal con detalles completos
+- `OrderStatusBadge`: Badge con estado y color
+- `EmptyOrdersState`: Estado vacío con CTA
+
+**4. Vista de Detalles**
+- Modal full-screen con información completa
+- Items comprados con imágenes
+- Información de contacto
+- Método de pago utilizado
+- Desglose de precios (subtotal, descuento, total)
+- Código promocional aplicado
+- Botón "Ver Entradas" (preparado para Milestone 5)
+
+**5. Navegación Integrada**
+- Enlace en UserMenu (Header)
+- Card de acceso rápido en ProfilePage
+- Breadcrumbs completos
+- Botón "Ver Mis Entradas" en confirmación de checkout
+
+#### 📁 Nuevos Archivos Creados
+
+```
+app/
+├── components/
+│   └── orders/
+│       ├── OrderCard.tsx              # Card individual de orden (85 líneas)
+│       ├── OrderDetailsModal.tsx      # Modal de detalles (210 líneas)
+│       ├── OrderStatusBadge.tsx       # Badge de estado (40 líneas)
+│       └── EmptyOrdersState.tsx       # Estado vacío (45 líneas)
+└── pages/
+    └── (protected)/
+        └── MyOrdersPage.tsx           # Página principal (125 líneas)
+```
+
+**Total:** ~505 líneas de código nuevo
+
+#### 🔄 Archivos Modificados
+
+- `app/App.tsx` - Agregada ruta `/profile/orders`
+- `app/components/layout/header/UserMenu.tsx` - Agregado item "Mis Órdenes"
+- `app/pages/(protected)/ProfilePage.tsx` - Agregado card de acceso rápido
+
+#### 🎨 Diseño Consistente
+
+- Fondo negro/gris oscuro (estilo del proyecto)
+- Borders que cambian a rojo al hover
+- Badges con colores semánticos:
+  - Verde: Completada
+  - Amarillo: Pendiente
+  - Rojo: Cancelada
+- Iconos de Lucide React
+- Animaciones suaves
+
+#### ✅ Criterios de Aceptación Cumplidos
+
+Funcionales:
+- ✅ Usuario puede ver todas sus órdenes
+- ✅ Usuario puede ver detalles completos de cada orden
+- ✅ Usuario ve estadísticas de sus compras
+- ✅ Usuario ve estado vacío si no tiene órdenes
+- ✅ Usuario puede acceder desde múltiples puntos
+- ✅ Las órdenes se cargan desde localStorage correctamente
+
+No Funcionales:
+- ✅ Diseño consistente con el resto de la aplicación
+- ✅ Responsive en mobile, tablet y desktop
+- ✅ Loading states implementados
+- ✅ Error handling implementado
+- ✅ Código TypeScript con tipos correctos
+- ✅ Componentes reutilizables y modulares
+
+---
+
 ## [1.6.0] - Enero 7, 2026
 
 ### 🏗️ Reestructuración Completa del Proyecto

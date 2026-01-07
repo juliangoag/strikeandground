@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, ChevronDown } from 'lucide-react';
+import { User, LogOut, Settings, ShoppingBag, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../../providers/AuthProvider';
 import { Overlay } from '../../ui/Overlay';
 
 const MENU_ITEMS = [
   { icon: User, label: 'Mi Perfil', path: '/profile' },
+  { icon: ShoppingBag, label: 'Mis Órdenes', path: '/profile/orders' },
   { icon: Settings, label: 'Configuración', path: '/profile/settings' },
 ] as const;
 
