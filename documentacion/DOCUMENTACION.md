@@ -21,11 +21,17 @@
    - [mockCheckoutService - Servicio de Órdenes](#mockcheckoutservice)
    - [CheckoutPage - Página Principal](#checkoutpage)
    - [Componentes del Checkout](#componentes-del-checkout)
-8. [Guía de Desarrollo](#8-guía-de-desarrollo)
-9. [API Reference](#9-api-reference)
-10. [Migración a Producción](#10-migración-a-producción)
-11. [Solución de Problemas](#11-solución-de-problemas)
-12. [FAQ](#12-faq)
+8. [Módulo de Administración](#8-módulo-de-administración)
+   - [Sistema de Roles](#sistema-de-roles)
+   - [AdminDashboard](#admindashboard)
+   - [AdminUsersPage](#adminuserspage)
+   - [AdminEventsPage](#admineventspage)
+   - [mockAdminService](#mockadminservice)
+9. [Guía de Desarrollo](#9-guía-de-desarrollo)
+10. [API Reference](#10-api-reference)
+11. [Migración a Producción](#11-migración-a-producción)
+12. [Solución de Problemas](#12-solución-de-problemas)
+13. [FAQ](#13-faq)
 
 ---
 
@@ -197,6 +203,7 @@ interface User {
   created_at: string;
   email_verified: boolean;
   last_login?: string;
+  role: 'user' | 'admin';        // Sistema de roles
 }
 ```
 
@@ -623,8 +630,11 @@ const isValidPassword = (password: string): boolean => {
 };
 ```
 
-### Usuario Demo Precargado
+### Usuarios Precargados
 
+El sistema incluye dos usuarios creados automáticamente:
+
+**Usuario Demo (Normal):**
 ```typescript
 const DEMO_USER = {
   id: 'demo-user-1',
@@ -634,10 +644,25 @@ const DEMO_USER = {
   avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo',
   created_at: new Date().toISOString(),
   email_verified: true,
+  role: 'user',
 };
 ```
 
-Este usuario se crea automáticamente la primera vez que se inicia la aplicación.
+**Usuario Administrador:**
+```typescript
+const ADMIN_USER = {
+  id: 'admin-user-1',
+  email: 'admin@strikeandground.com',
+  name: 'Administrador',
+  password: 'Admin123!',
+  avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+  created_at: new Date().toISOString(),
+  email_verified: true,
+  role: 'admin',
+};
+```
+
+Ambos usuarios se crean automáticamente la primera vez que se inicia la aplicación.
 
 ---
 
@@ -2304,7 +2329,669 @@ npm install @paypal/react-paypal-js
 
 ---
 
-## 8. Guía de Desarrollo
+## 8. Módulo de Administración
+
+### Visión General
+
+El módulo de administración proporciona un panel completo para gestionar usuarios, eventos, órdenes y tickets. Incluye un sistema de roles que diferencia entre usuarios normales y administradores.
+
+**Estado de Implementación:** Fase 1 y 2 completadas (Dashboard + Usuarios + Eventos)
+
+### Sistema de Roles
+
+#### Roles Disponibles
+
+```typescript
+type UserRole = 'user' | 'admin';
+
+interface User {
+  // ... otros campos
+  role: UserRole;  // Campo agregado
+}
+```
+
+**Roles:**
+- `'user'` - Usuario normal con acceso estándar
+- `'admin'` - Administrador con acceso al panel de administración
+
+#### AdminRoute Component
+
+**Ubicación:** `app/lib/auth/components/AdminRoute.tsx`
+
+**Funcionalidad:** HOC (Higher-Order Component) que protege rutas administrativas verificando que el usuario esté autenticado Y tenga rol de administrador.
+
+```typescript
+import { AdminRoute } from '../lib/auth/components/AdminRoute';
+
+// Uso en App.tsx
+<Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
+/>
+```
+
+**Comportamiento:**
+- Si no hay usuario autenticado → Redirige a `/`
+- Si el usuario no es admin → Redirige a `/`
+- Si el usuario es admin → Permite acceso
+
+**Loading State:**
+```typescript
+if (isLoading) {
+  return <LoadingSpinner />;
+}
+```
+
+#### Verificación de Rol en Componentes
+
+```typescript
+import { useAuth } from '../providers/AuthProvider';
+
+function MyComponent() {
+  const { user } = useAuth();
+  
+  // Mostrar contenido solo para admins
+  {user?.role === 'admin' && (
+    <Link to="/admin">Panel Admin</Link>
+  )}
+}
+```
+
+### AdminDashboard
+
+**Ubicación:** `app/pages/(protected)/admin/AdminDashboard.tsx`  
+**Ruta:** `/admin`
+
+#### Características
+
+**1. Estadísticas en Tiempo Real**
+
+Grid de cards con métricas principales:
+- Total de eventos
+- Órdenes completadas (con pendientes como subtitle)
+- Ingresos totales
+- Usuarios registrados
+- Tickets generados
+- Tickets validados
+
+```typescript
+const [stats, setStats] = useState<AdminStatistics | null>(null);
+
+useEffect(() => {
+  const loadData = async () => {
+    const statistics = await mockAdminService.getStatistics();
+    setStats(statistics);
+  };
+  loadData();
+}, []);
+```
+
+**2. Tabla de Órdenes Recientes**
+
+Lista de las últimas 5 órdenes con:
+- ID de orden (truncado)
+- Nombre del cliente
+- Total pagado
+- Estado (con badge de color)
+- Fecha
+
+**3. Accesos Rápidos**
+
+Cards clicables para:
+- Gestionar Eventos → `/admin/events`
+- Gestionar Usuarios → `/admin/users`
+- Validar Tickets → `/admin/scan`
+
+#### Componente StatCard
+
+**Ubicación:** `app/components/admin/StatCard.tsx`
+
+```typescript
+interface StatCardProps {
+  icon: LucideIcon;
+  label: string;
+  value: string | number;
+  subtitle?: string;
+  color?: 'red' | 'green' | 'blue' | 'yellow' | 'purple';
+}
+
+// Uso
+<StatCard
+  icon={Calendar}
+  label="Total Eventos"
+  value={stats.totalEvents}
+  color="red"
+/>
+```
+
+### AdminUsersPage
+
+**Ubicación:** `app/pages/(protected)/admin/AdminUsersPage.tsx`  
+**Ruta:** `/admin/users`
+
+#### Características
+
+**1. Tabla Completa de Usuarios**
+
+Columnas mostradas:
+- Avatar + Nombre + Total tickets
+- Email
+- Rol (badge con icono)
+- Total de órdenes
+- Total gastado
+- Fecha de registro
+- Acciones
+
+**2. Sistema de Búsqueda y Filtros**
+
+```typescript
+const [searchTerm, setSearchTerm] = useState('');
+const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
+
+// Filtrado en tiempo real
+const filteredUsers = useMemo(() => {
+  return users.filter(user => {
+    const matchesSearch = 
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    
+    return matchesSearch && matchesRole;
+  });
+}, [users, searchTerm, roleFilter]);
+```
+
+**Filtros disponibles:**
+- Búsqueda por nombre o email
+- Filtro por rol (Todos / Administradores / Usuarios)
+
+**3. Estadísticas Rápidas**
+
+Cards superiores mostrando:
+- Total de usuarios
+- Total de administradores
+- Total de usuarios normales
+
+**4. Gestión de Roles**
+
+Cada usuario tiene un botón para cambiar su rol:
+
+```typescript
+const handleChangeRole = async (userId: string, currentRole: 'user' | 'admin') => {
+  const newRole = currentRole === 'admin' ? 'user' : 'admin';
+  
+  if (!confirm(`¿Cambiar rol de este usuario a ${newRole}?`)) {
+    return;
+  }
+  
+  await mockAdminService.changeUserRole(userId, newRole);
+  await loadUsers(); // Recargar lista
+};
+```
+
+**Botones:**
+- Si es admin → Botón "Hacer Usuario"
+- Si es user → Botón "Hacer Admin"
+
+**5. Estadísticas por Usuario**
+
+Cada fila muestra:
+- Total de órdenes del usuario
+- Dinero total gastado
+- Total de tickets comprados
+- Fecha de registro
+- Última actividad
+
+### AdminEventsPage
+
+**Ubicación:** `app/pages/(protected)/admin/AdminEventsPage.tsx`  
+**Ruta:** `/admin/events`
+
+#### Características
+
+**1. Tabla de Eventos**
+
+Información mostrada:
+- Imagen miniatura (16x16)
+- Título + Combate principal
+- Fecha formateada
+- Ubicación
+- Categoría (badge)
+- Precio base
+- Estado (Destacado badge si aplica)
+- Acciones (Ver detalles)
+
+**2. Sistema de Filtros Avanzados**
+
+```typescript
+const [searchTerm, setSearchTerm] = useState('');
+const [categoryFilter, setCategoryFilter] = useState<string>('all');
+const [cityFilter, setCityFilter] = useState<string>('all');
+
+// Filtrado combinado
+const filteredEvents = useMemo(() => {
+  return upcomingEvents.filter(event => {
+    const matchesSearch = 
+      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      event.mainFight.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      event.location.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = categoryFilter === 'all' || event.category === categoryFilter;
+    const matchesCity = cityFilter === 'all' || event.location.includes(cityFilter);
+    
+    return matchesSearch && matchesCategory && matchesCity;
+  });
+}, [searchTerm, categoryFilter, cityFilter]);
+```
+
+**Filtros disponibles:**
+- 🔍 Búsqueda en tiempo real (título, combate, ubicación)
+- 📂 Categoría (MMA, Boxing, Kickboxing, etc.)
+- 🌍 Ciudad (Madrid, Barcelona, Valencia, etc.)
+
+**3. Estadísticas de Eventos**
+
+- Total de eventos
+- Eventos destacados
+- Resultados filtrados (cuando hay filtros activos)
+
+**4. Botón de Crear Evento**
+
+Preparado para futura implementación:
+```typescript
+<button
+  onClick={() => alert('Función de crear evento próximamente')}
+  className="bg-red-600 hover:bg-red-700..."
+>
+  <Plus className="w-5 h-5" />
+  Crear Evento
+</button>
+```
+
+**5. Link a Detalles**
+
+Cada evento tiene un botón con icono de ojo que abre el evento en nueva pestaña:
+```typescript
+<Link
+  to={`/eventos/${event.id}/details`}
+  target="_blank"
+  className="..."
+>
+  <Eye className="w-4 h-4" />
+</Link>
+```
+
+### AdminLayout
+
+**Ubicación:** `app/components/admin/AdminLayout.tsx`
+
+Layout wrapper para todas las páginas administrativas.
+
+```typescript
+interface AdminLayoutProps {
+  children: ReactNode;
+  title?: string;
+  description?: string;
+}
+
+// Uso
+<AdminLayout 
+  title="Dashboard" 
+  description="Resumen general del sistema"
+>
+  {/* Contenido de la página */}
+</AdminLayout>
+```
+
+**Estructura:**
+```
+┌─────────────────────────────────────────┐
+│ AdminSidebar (fixed, left)              │
+│  ┌───────────────────────────────────┐  │
+│  │ Logo + Título                     │  │
+│  │                                   │  │
+│  │ [Dashboard]                       │  │
+│  │ [Eventos]                         │  │
+│  │ [Usuarios]                        │  │
+│  │ [Scanner]                         │  │
+│  │                                   │  │
+│  │ [Volver al Sitio]                 │  │
+│  └───────────────────────────────────┘  │
+│                                         │
+│  Main Content (ml-64)                   │
+│  ┌───────────────────────────────────┐  │
+│  │ Title + Description               │  │
+│  │                                   │  │
+│  │ {children}                        │  │
+│  └───────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+```
+
+### AdminSidebar
+
+**Ubicación:** `app/components/admin/AdminSidebar.tsx`
+
+#### Características
+
+**1. Items de Navegación**
+
+```typescript
+const navItems = [
+  { path: '/admin', icon: Home, label: 'Dashboard' },
+  { path: '/admin/events', icon: Calendar, label: 'Eventos' },
+  { path: '/admin/users', icon: Users, label: 'Usuarios' },
+  { path: '/admin/scan', icon: QrCode, label: 'Scanner' },
+];
+```
+
+**2. Detección de Ruta Activa**
+
+```typescript
+const isActive = (path: string) => {
+  if (path === '/admin') {
+    return location.pathname === '/admin';
+  }
+  return location.pathname.startsWith(path);
+};
+```
+
+**Item activo:** Fondo rojo, texto blanco
+**Item inactivo:** Gris, hover gris oscuro
+
+**3. Link de Retorno**
+
+Botón fijo en la parte inferior para volver al sitio principal:
+```typescript
+<Link to="/" className="...">
+  <ArrowLeft className="w-5 h-5" />
+  <span>Volver al Sitio</span>
+</Link>
+```
+
+### mockAdminService
+
+**Ubicación:** `app/lib/admin/services/mockAdminService.ts`
+
+Servicio MOCK para operaciones administrativas.
+
+#### Métodos Disponibles
+
+##### getStatistics()
+
+Obtiene estadísticas generales del sistema.
+
+```typescript
+const stats = await mockAdminService.getStatistics();
+
+// Retorna: AdminStatistics
+interface AdminStatistics {
+  totalEvents: number;
+  publishedEvents: number;
+  draftEvents: number;
+  totalOrders: number;
+  completedOrders: number;
+  pendingOrders: number;
+  totalRevenue: number;
+  totalUsers: number;
+  totalTickets: number;
+  validatedTickets: number;
+}
+```
+
+**Implementación:**
+- Lee todas las órdenes de `mockCheckoutService`
+- Cuenta tickets del `mockTicketService`
+- Lee usuarios del localStorage
+- Calcula ingresos totales de órdenes completadas
+
+##### getAllUsersWithStats()
+
+Obtiene todos los usuarios con sus estadísticas de compra.
+
+```typescript
+const users = await mockAdminService.getAllUsersWithStats();
+
+// Retorna: UserWithStats[]
+interface UserWithStats extends User {
+  totalOrders: number;
+  totalSpent: number;
+  totalTickets: number;
+  lastActivity: string;  // Fecha de última orden
+}
+```
+
+**Cálculos:**
+- Órdenes por usuario
+- Total gastado (suma de órdenes completadas)
+- Tickets comprados (suma de quantities)
+- Última actividad (fecha de orden más reciente)
+
+##### changeUserRole(userId, newRole)
+
+Cambia el rol de un usuario.
+
+```typescript
+await mockAdminService.changeUserRole('user-123', 'admin');
+
+// Parámetros
+userId: string
+newRole: 'user' | 'admin'
+
+// Retorna: Promise<void>
+```
+
+**Funcionalidad:**
+1. Busca usuario en localStorage
+2. Actualiza su rol
+3. Si es el usuario actual, actualiza también `current_user`
+4. Guarda cambios en localStorage
+
+**Nota de Seguridad:** En producción esto debe hacerse en el backend con validaciones.
+
+##### getRecentOrders(limit)
+
+Obtiene las órdenes más recientes.
+
+```typescript
+const orders = await mockAdminService.getRecentOrders(10);
+
+// Parámetros
+limit: number = 10  // Cantidad de órdenes a retornar
+
+// Retorna: Promise<Order[]>
+```
+
+**Ordenamiento:** Por fecha descendente (más recientes primero)
+
+### Tipos Admin
+
+**Ubicación:** `app/lib/admin/types.ts`
+
+```typescript
+// Estadísticas del dashboard
+export interface AdminStatistics {
+  totalEvents: number;
+  publishedEvents: number;
+  draftEvents: number;
+  totalOrders: number;
+  completedOrders: number;
+  pendingOrders: number;
+  totalRevenue: number;
+  totalUsers: number;
+  totalTickets: number;
+  validatedTickets: number;
+}
+
+// Usuario con estadísticas adicionales
+export interface UserWithStats extends User {
+  totalOrders: number;
+  totalSpent: number;
+  totalTickets: number;
+  lastActivity: string;
+}
+
+// Datos del formulario de evento (futuro)
+export interface EventFormData {
+  id?: string;
+  title: string;
+  date: string;
+  location: string;
+  mainFight: string;
+  image: string;
+  basePrice: number;
+  category: string;
+  isFeatured: boolean;
+  isPublished: boolean;
+}
+
+// Estadísticas de un evento
+export interface EventStats {
+  eventId: string;
+  totalOrders: number;
+  totalTicketsSold: number;
+  totalRevenue: number;
+}
+```
+
+### Acceso al Panel de Administración
+
+#### Desde el Header
+
+El menú de usuario (`UserMenu`) muestra una opción adicional para administradores:
+
+```typescript
+{user.role === 'admin' && (
+  <button
+    onClick={() => handleNavigation('/admin')}
+    className="... text-red-400 ..."
+  >
+    <Shield className="w-4 h-4" />
+    Panel Admin
+  </button>
+)}
+```
+
+**Ubicación en el menú:**
+- Después de "Mi Perfil", "Mis Órdenes", "Configuración"
+- Separado visualmente con border-top
+- Color rojo para diferenciarlo
+- Icono de escudo (Shield)
+
+#### Navegación Directa
+
+Administradores pueden navegar directamente a:
+- `/admin` - Dashboard principal
+- `/admin/users` - Gestión de usuarios
+- `/admin/events` - Gestión de eventos
+
+Si un usuario normal intenta acceder, será redirigido a `/`.
+
+### Mejora del Login para Testing
+
+**Ubicación:** `app/lib/auth/components/LoginForm.tsx`
+
+Se agregaron botones de acceso rápido para facilitar el testing:
+
+```typescript
+<div className="flex gap-2">
+  <button
+    type="button"
+    onClick={() => setEmail('demo@...') + setPassword('Demo123!')}
+    className="... bg-blue-600..."
+  >
+    <User className="w-3.5 h-3.5" />
+    Usuario Demo
+  </button>
+  
+  <button
+    type="button"
+    onClick={() => setEmail('admin@...') + setPassword('Admin123!')}
+    className="... bg-red-600..."
+  >
+    <Shield className="w-3.5 h-3.5" />
+    Admin
+  </button>
+</div>
+```
+
+**Beneficios:**
+- ✅ Testing más rápido
+- ✅ No necesitas recordar credenciales
+- ✅ Identificación visual clara (User vs Shield)
+- ✅ Colores distintivos (azul vs rojo)
+
+### Credenciales de Acceso
+
+**Usuario Administrador:**
+```
+Email: admin@strikeandground.com
+Password: Admin123!
+```
+
+**Usuario Demo (Normal):**
+```
+Email: demo@strikeandground.com
+Password: Demo123!
+```
+
+### Próximas Fases (Milestone 3)
+
+**Fase 3: CRUD de Eventos**
+- Crear nuevos eventos
+- Editar eventos existentes
+- Eliminar eventos
+- Toggle destacado/publicado
+
+**Fase 4: Scanner Mejorado**
+- Página de validación de tickets
+- Estadísticas de validación
+- Historial de validaciones
+
+**Fase 5: Funcionalidades Adicionales**
+- Gestión de códigos promocionales
+- Reportes de ventas
+- Exportación de datos
+- Notificaciones admin
+
+### Seguridad y Consideraciones
+
+**⚠️ Sistema MOCK:**
+- El sistema de roles es solo frontend
+- NO es seguro para producción
+- Cualquiera puede modificar localStorage
+
+**Para Producción:**
+- Implementar verificación de roles en backend
+- JWT con claim de rol
+- Middleware de autorización
+- Auditoría de acciones admin
+- Rate limiting en endpoints admin
+
+**Ejemplo Backend (Express):**
+```typescript
+// Middleware de autorización
+function requireAdmin(req, res, next) {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+}
+
+// Ruta protegida
+app.get('/api/admin/users', requireAdmin, async (req, res) => {
+  const users = await db.users.findAll();
+  res.json(users);
+});
+```
+
+---
+
+## 9. Guía de Desarrollo
 
 ### Setup del Entorno
 
@@ -2522,7 +3209,7 @@ console.log('[MOCK] Email verificado exitosamente');
 
 ---
 
-## 9. API Reference
+## 10. API Reference
 
 ### useAuth Hook
 
@@ -2640,9 +3327,18 @@ updates: Partial<User>
 ### localStorage Keys
 
 ```typescript
-'strike_ground_users'        // Array<User>
-'strike_ground_current_user' // User | null
-'strike_ground_session'      // Session | null
+// Autenticación
+'strike_ground_users'         // Array<User>
+'strike_ground_current_user'  // User | null
+'strike_ground_session'       // Session | null
+
+// Checkout y Órdenes
+'strike_ground_cart'          // Array<CheckoutItem>
+'strike_ground_orders'        // Array<Order>
+
+// Tickets
+'strike_ground_tickets'       // Array<Ticket>
+'strike_ground_validations'   // Array<Validation>
 ```
 
 ### Tipos TypeScript Completos
@@ -2699,7 +3395,7 @@ export interface AuthContextType {
 
 ---
 
-## 10. Migración a Producción
+## 11. Migración a Producción
 
 ### ⚠️ Importante
 
@@ -3010,7 +3706,7 @@ async function uploadToSupabase(file: File): Promise<string> {
 
 ---
 
-## 11. Solución de Problemas
+## 12. Solución de Problemas
 
 ### Problemas Comunes
 
@@ -3190,7 +3886,7 @@ Busca estos logs en la consola para debugging.
 
 ---
 
-## 12. FAQ
+## 13. FAQ
 
 ### General
 
@@ -3384,9 +4080,9 @@ Para más información o ayuda específica, consulta las secciones relevantes de
 
 ---
 
-**Versión**: 1.5.1 (MOCK)  
-**Última actualización**: Diciembre 22, 2025  
-**Estado**: ✅ Sistema MOCK completamente funcional + Código Auditado y Optimizado
+**Versión**: 1.9.0 (MOCK)  
+**Última actualización**: Enero 9, 2026  
+**Estado**: ✅ Sistema MOCK completo con Panel de Administración (Dashboard + Usuarios + Eventos)
 
 ---
 
