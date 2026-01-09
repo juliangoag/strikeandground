@@ -165,7 +165,7 @@ export function ProfilePage() {
                   {/* Name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Nombre completo
+                      Nombre
                     </label>
                     {isEditing ? (
                       <input

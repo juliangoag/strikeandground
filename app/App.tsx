@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './providers/AuthProvider';
 import { CartProvider } from './providers/CartProvider';
 import { ProtectedRoute } from './lib/auth/components/ProtectedRoute';
+import { AdminRoute } from './lib/auth/components/AdminRoute';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
@@ -12,6 +13,9 @@ import { ProfilePage } from './pages/(protected)/ProfilePage';
 import { SettingsPage } from './pages/(protected)/SettingsPage';
 import { MyOrdersPage } from './pages/(protected)/MyOrdersPage';
 import { TicketsPage } from './pages/(protected)/TicketsPage';
+import { AdminDashboard } from './pages/(protected)/admin/AdminDashboard';
+import { AdminUsersPage } from './pages/(protected)/admin/AdminUsersPage';
+import { AdminEventsPage } from './pages/(protected)/admin/AdminEventsPage';
 
 function App() {
   return (
@@ -55,6 +59,31 @@ function App() {
                   <ProtectedRoute>
                     <TicketsPage />
                   </ProtectedRoute>
+                }
+              />
+              {/* Admin Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminRoute>
+                    <AdminUsersPage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/events"
+                element={
+                  <AdminRoute>
+                    <AdminEventsPage />
+                  </AdminRoute>
                 }
               />
             </Routes>

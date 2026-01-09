@@ -1,5 +1,7 @@
 // Tipos para el sistema de autenticación
 
+export type UserRole = 'user' | 'admin';
+
 export interface User {
   id: string;
   email: string;
@@ -7,6 +9,7 @@ export interface User {
   avatar_url?: string;
   created_at: string;
   email_verified: boolean;
+  role: UserRole;
 }
 
 export interface AuthState {

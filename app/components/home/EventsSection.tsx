@@ -13,7 +13,7 @@ export function EventsSection() {
             Próximos Eventos
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Las mejores veladas de deportes de contacto. No te pierdas la acción.
+            No te pierdas la acción.
           </p>
         </div>
 

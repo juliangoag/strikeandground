@@ -29,7 +29,7 @@ export function Hero() {
             href="#eventos"
             className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg transition-all font-semibold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-500/50 w-full sm:w-auto"
           >
-            Ver Próximos Eventos
+            Próximos Eventos
           </a>
           <button className="border-2 border-gray-700 hover:border-gray-600 text-white px-8 py-4 rounded-lg transition-all font-semibold text-lg w-full sm:w-auto">
             ¿Cómo funciona?

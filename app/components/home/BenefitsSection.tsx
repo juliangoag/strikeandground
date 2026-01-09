@@ -32,7 +32,7 @@ export function BenefitsSection() {
             ¿Por Qué Elegirnos?
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            La forma más segura y confiable de conseguir tus entradas para eventos de deportes de contacto.
+            La forma más segura y confiable de conseguir tus entradas.
           </p>
         </div>
 

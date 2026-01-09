@@ -95,7 +95,7 @@ export const MyOrdersPage = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Mis Órdenes</h1>
           <p className="text-gray-400">
-            Gestiona y revisa todas tus compras de entradas
+            Gestiona y revisa todas tus compras
           </p>
         </div>
 

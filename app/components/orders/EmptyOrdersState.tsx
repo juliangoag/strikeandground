@@ -31,7 +31,7 @@ export const EmptyOrdersState = ({ hasFilters = false }: EmptyOrdersStateProps) 
             Aún no has realizado ninguna compra
           </h3>
           <p className="text-gray-400 text-center max-w-md mb-8">
-            Explora nuestros eventos de deportes de contacto y consigue tus entradas para los mejores combates.
+            Explora nuestros eventos.
           </p>
           <Link
             to="/eventos"

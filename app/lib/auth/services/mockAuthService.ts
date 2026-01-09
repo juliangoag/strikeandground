@@ -9,7 +9,7 @@ const SESSION_KEY = 'strike_ground_session';
 // Simula latencia de red
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Usuario demo precargado
+// Usuario demo precargado (usuario normal)
 const DEMO_USER = {
   id: 'demo-user-1',
   email: 'demo@strikeandground.com',
@@ -18,13 +18,26 @@ const DEMO_USER = {
   avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo',
   created_at: new Date().toISOString(),
   email_verified: true,
+  role: 'user' as const, // Usuario demo es usuario normal
+};
+
+// Usuario admin específico
+const ADMIN_USER = {
+  id: 'admin-user-1',
+  email: 'admin@strikeandground.com',
+  name: 'Administrador',
+  password: 'Admin123!', // Password: Admin123!
+  avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=b6e3f4',
+  created_at: new Date().toISOString(),
+  email_verified: true,
+  role: 'admin' as const,
 };
 
 // Inicializar usuarios mock
 const initMockUsers = () => {
   const users = localStorage.getItem(USERS_KEY);
   if (!users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify([DEMO_USER]));
+    localStorage.setItem(USERS_KEY, JSON.stringify([DEMO_USER, ADMIN_USER]));
   }
 };
 
@@ -93,6 +106,7 @@ export const mockAuthService = {
       avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
       created_at: new Date().toISOString(),
       email_verified: false, // En MOCK lo verificamos automáticamente después
+      role: 'user' as const, // Nuevos usuarios son 'user' por defecto
     };
 
     users.push(newUser);

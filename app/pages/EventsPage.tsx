@@ -57,10 +57,6 @@ export function EventsPage() {
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Todos los Eventos
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Descubre las mejores veladas de deportes de contacto. Filtra por ciudad,
-            categoría o busca tu evento favorito.
-          </p>
         </div>
 
         {/* Search Bar */}

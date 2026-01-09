@@ -15,16 +15,23 @@ npm run dev
 # http://localhost:5174
 ```
 
-## 🔑 Credenciales Demo
+## 🔑 Credenciales de Acceso
 
-El sistema incluye un usuario demo precargado:
+El sistema incluye dos usuarios precargados:
 
+### Usuario Demo (Normal)
 ```
 Email: demo@strikeandground.com
 Password: Demo123!
 ```
 
-**Uso:** Click en "Iniciar Sesión" → "Usar credenciales demo" → "Iniciar Sesión"
+### Usuario Administrador
+```
+Email: admin@strikeandground.com
+Password: Admin123!
+```
+
+**Uso:** Click en "Iniciar Sesión" → Ingresa las credenciales → "Iniciar Sesión"
 
 ## ✨ Funcionalidades
 
@@ -97,11 +104,26 @@ Password: Demo123!
   - Firma de seguridad en cada ticket
   - Historial de validaciones
 
+- **Panel de Administración (NUEVO)**
+  - Sistema de roles (Admin / Usuario)
+  - Dashboard con estadísticas en tiempo real
+  - Gestión completa de usuarios
+  - Cambio de roles de usuarios
+  - Vista de órdenes recientes
+  - Estadísticas de tickets validados
+  - **Gestión de eventos con filtros avanzados**
+  - Tabla completa de eventos con búsqueda
+  - Filtros por categoría y ciudad
+  - Vista rápida de eventos destacados
+  - Layout profesional con sidebar
+  - Protección de rutas por rol
+  - Acceso rápido desde el menú de usuario
+
 ### Pendiente ⚠️
 
 - Backend real (actualmente usa localStorage)
 - Pasarela de pago real (Stripe/PayPal)
-- Panel de administración completo
+- CRUD completo de eventos en admin
 - Scanner de QR con cámara web
 - Sistema de notificaciones en tiempo real
 - Integración con email service
@@ -148,6 +170,14 @@ La documentación completa del proyecto está en la carpeta `documentacion/`:
 /profile/settings      → Configuración de usuario
 /profile/orders        → Mis órdenes y compras
 /tickets/:orderId      → Entradas digitales con QR de una orden
+```
+
+### Rutas de Administración (requieren rol admin)
+```
+/admin                 → Dashboard administrativo
+/admin/users           → Gestión de usuarios y roles
+/admin/events          → Gestión de eventos con filtros
+/admin/scan            → Scanner de tickets (próximamente)
 ```
 
 ## 🛠️ Comandos Disponibles
@@ -220,13 +250,14 @@ El carrito persiste en localStorage. Si se vació, puede ser que el navegador li
 ## 📊 Estado del Proyecto
 
 ```
-🟢 Frontend:     100% completo
-🟢 Carrito:      100% funcional (MOCK)
-🟢 Checkout:     100% funcional (MOCK)
-🟢 Órdenes:      100% funcional (MOCK)
-🟢 Tickets/QR:   100% funcional (MOCK)
-🟡 Backend:      MOCK funcional
-🔴 Producción:   Requiere migración a backend real
+🟢 Frontend:       100% completo
+🟢 Carrito:        100% funcional (MOCK)
+🟢 Checkout:       100% funcional (MOCK)
+🟢 Órdenes:        100% funcional (MOCK)
+🟢 Tickets/QR:     100% funcional (MOCK)
+🟢 Panel Admin:    60% funcional (Dashboard + Usuarios + Eventos)
+🟡 Backend:        MOCK funcional
+🔴 Producción:     Requiere migración a backend real
 ```
 
 ## 📄 Licencia
@@ -235,9 +266,9 @@ El carrito persiste en localStorage. Si se vació, puede ser que el navegador li
 
 ---
 
-**Versión**: 1.8.0 (MOCK)  
-**Última actualización**: Enero 7, 2026  
-**Estado**: ✅ Sistema completo con Órdenes y Entradas Digitales con QR
+**Versión**: 1.9.0 (MOCK)  
+**Última actualización**: Enero 9, 2026  
+**Estado**: ✅ Sistema completo con Panel de Administración (Fase 1 y 2)
 
 ---
 

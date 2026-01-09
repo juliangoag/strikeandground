@@ -336,7 +336,7 @@ function NotificationsSection({ onMessage }: { onMessage: (msg: any) => void }) 
         />
         <NotificationToggle
           label="Newsletter"
-          description="Noticias y novedades de deportes de contacto"
+          description="Noticias y novedades"
           checked={notifications.newsletter}
           onChange={(checked) => setNotifications(prev => ({ ...prev, newsletter: checked }))}
         />

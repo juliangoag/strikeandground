@@ -4,6 +4,208 @@ Historial de cambios e implementaciones del proyecto Strike & Ground.
 
 ---
 
+## [1.9.0] - Enero 9, 2026
+
+### 🛡️ Panel de Administración - Fase 1 y 2 (Milestone 3)
+
+**Objetivo:** Implementar panel administrativo con sistema de roles, dashboard con estadísticas y gestión de usuarios.
+
+#### ✨ Funcionalidades Implementadas
+
+**1. Sistema de Roles**
+- Agregado campo `role: 'user' | 'admin'` a interfaz User
+- Usuario demo convertido a usuario normal
+- Nuevo usuario administrador específico (admin@strikeandground.com)
+- Componente `AdminRoute` para proteger rutas administrativas
+- Verificación de roles en frontend
+- Redirección automática si no tiene permisos
+
+**2. Dashboard Administrativo**
+- Panel principal con estadísticas en tiempo real
+- Cards de métricas: Eventos, Órdenes, Ingresos, Usuarios
+- Estadísticas de tickets generados y validados
+- Tabla de órdenes recientes (últimas 5)
+- Accesos rápidos a funcionalidades principales
+- Layout profesional con sidebar
+
+**3. Gestión de Usuarios**
+- Página completa de administración de usuarios
+- Tabla con todos los usuarios registrados
+- Estadísticas por usuario (órdenes, gasto total, tickets)
+- Búsqueda en tiempo real por nombre o email
+- Filtros por rol (Admin / Usuario / Todos)
+- Cambio de rol con confirmación
+- Indicadores visuales de rol y estadísticas
+- Actualización en tiempo real después de cambios
+
+**4. Layout Administrativo**
+- Sidebar de navegación fija con items:
+  - Dashboard (estadísticas generales)
+  - Usuarios (gestión de usuarios)
+  - Eventos (próximamente)
+  - Scanner (próximamente)
+- Header con título de sección
+- Link "Volver al Sitio"
+- Diseño responsive
+- Colores consistentes con el tema de la app
+
+**5. Integración con Sistema Existente**
+- Acceso al panel desde UserMenu (solo para admins)
+- Icono de escudo (Shield) para identificar sección admin
+- Badge visual en el menú de usuario
+- Rutas protegidas con AdminRoute
+- Sincronización con localStorage
+
+#### 📁 Nuevos Archivos Creados
+
+```
+app/
+├── lib/
+│   ├── admin/
+│   │   ├── services/
+│   │   │   └── mockAdminService.ts       # Servicio MOCK admin (110 líneas)
+│   │   └── types.ts                       # Tipos admin (45 líneas)
+│   └── auth/
+│       └── components/
+│           └── AdminRoute.tsx             # Protección de rutas (35 líneas)
+├── components/
+│   └── admin/
+│       ├── AdminLayout.tsx                # Layout principal (35 líneas)
+│       ├── AdminSidebar.tsx               # Navegación sidebar (75 líneas)
+│       └── StatCard.tsx                   # Card de estadística (30 líneas)
+└── pages/
+    └── (protected)/
+        └── admin/
+            ├── AdminDashboard.tsx         # Dashboard principal (180 líneas)
+            └── AdminUsersPage.tsx         # Gestión de usuarios (245 líneas)
+```
+
+**Total:** ~755 líneas de código nuevo
+
+#### 🔄 Archivos Modificados
+
+- `app/lib/auth/types.ts` - Agregado campo `role` a User
+- `app/lib/auth/services/mockAuthService.ts` - Usuario demo a 'user', creado ADMIN_USER
+- `app/App.tsx` - Agregadas rutas `/admin` y `/admin/users`
+- `app/components/layout/header/UserMenu.tsx` - Agregado acceso a Panel Admin
+- `documentacion/Milestone-3.md` - Creado plan completo
+
+#### 🎨 Características del Diseño
+
+**Dashboard:**
+- Grid de cards con estadísticas principales
+- Iconos de Lucide React con colores distintivos
+- Cards hover con transiciones suaves
+- Tabla de órdenes con estados visuales
+- Accesos rápidos con iconos grandes
+- Fondo oscuro consistente con la app
+
+**Gestión de Usuarios:**
+- Tabla completa con avatares
+- Búsqueda y filtros avanzados
+- Badges de rol con iconos (Shield para admin)
+- Botones de acción por usuario
+- Estadísticas inline (órdenes, gasto, tickets)
+- Loading states en botones de acción
+
+**Sidebar:**
+- Logo y título del panel
+- Navegación con iconos
+- Item activo destacado en rojo
+- Sticky al hacer scroll
+- Link de retorno al sitio principal
+
+#### 🔐 Seguridad
+
+- Rutas protegidas con `AdminRoute`
+- Verificación de autenticación y rol
+- Opciones admin ocultas para usuarios normales
+- Confirmación antes de cambiar roles
+- Actualización sincronizada en localStorage
+
+#### 📊 Estadísticas Disponibles
+
+**Dashboard:**
+- Total de eventos
+- Órdenes completadas vs pendientes
+- Ingresos totales calculados
+- Usuarios registrados
+- Tickets generados y validados
+
+**Por Usuario:**
+- Total de órdenes
+- Dinero gastado total
+- Tickets comprados
+- Fecha de registro
+- Última actividad
+
+#### 🎯 Criterios de Aceptación Cumplidos
+
+- ✅ Usuario admin puede acceder al panel
+- ✅ Usuario normal NO puede acceder al panel
+- ✅ Admin puede ver estadísticas de ventas
+- ✅ Admin puede ver lista de usuarios
+- ✅ Admin puede cambiar roles de usuarios
+- ✅ Dashboard muestra datos en tiempo real
+- ✅ Todas las acciones se persisten en localStorage
+- ✅ Diseño consistente con el resto de la app
+- ✅ Código TypeScript type-safe
+- ✅ 0 errores de linting
+- ✅ Build exitoso
+
+#### 📝 Credenciales de Acceso
+
+**Usuario Administrador:**
+```
+Email: admin@strikeandground.com
+Password: Admin123!
+```
+
+**Usuario Demo (Normal):**
+```
+Email: demo@strikeandground.com
+Password: Demo123!
+```
+
+#### 🎨 Mejora del Login (Enero 9, 2026 - tarde)
+
+**Acceso Rápido a Credenciales:**
+- Agregados dos botones de acceso rápido en el formulario de login
+- Botón "Usuario Demo" (azul) - Rellena credenciales del usuario normal
+- Botón "Admin" (rojo con escudo) - Rellena credenciales del administrador
+- Mejora UX para testing y demos
+- Iconos distintivos (User y Shield)
+
+#### 📋 Gestión de Eventos en Admin (Enero 9, 2026 - tarde)
+
+**Nueva Página: AdminEventsPage**
+- Tabla completa con todos los eventos del sistema
+- Búsqueda en tiempo real por nombre, combate o ubicación
+- Filtro por categoría (MMA, Boxing, etc.)
+- Filtro por ciudad
+- Estadísticas: Total eventos y eventos destacados
+- Vista de miniatura de cada evento
+- Información detallada: fecha, ubicación, precio base
+- Badge de eventos destacados
+- Link directo para ver detalles del evento
+- Contador de resultados filtrados
+- Diseño responsive y consistente
+
+**Archivos Creados:**
+- `app/pages/(protected)/admin/AdminEventsPage.tsx` (285 líneas)
+
+**Archivos Modificados:**
+- `app/App.tsx` - Agregada ruta `/admin/events`
+- `app/lib/auth/components/LoginForm.tsx` - Botones de acceso rápido
+
+#### 🚀 Próximos Pasos
+
+- Fase 3: CRUD completo de eventos (crear, editar, eliminar)
+- Fase 4: Mejorar página de validación de tickets
+- Fase 5: Scanner con cámara web (próximamente)
+
+---
+
 ## [1.8.0] - Enero 7, 2026
 
 ### 🎟️ Sistema de Entradas Digitales con QR Code (Milestone 5)

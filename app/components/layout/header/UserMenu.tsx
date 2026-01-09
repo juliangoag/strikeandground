@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, ShoppingBag, ChevronDown } from 'lucide-react';
+import { User, LogOut, Settings, ShoppingBag, ChevronDown, Shield } from 'lucide-react';
 import { useAuth } from '../../../providers/AuthProvider';
 import { Overlay } from '../../ui/Overlay';
 
@@ -85,6 +85,18 @@ export function UserMenu() {
                   {item.label}
                 </button>
               ))}
+              
+              {/* Admin Panel - Solo para admins */}
+              {user.role === 'admin' && (
+                <button
+                  type="button"
+                  onClick={() => handleNavigation('/admin')}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors text-sm font-medium border-t border-gray-800 mt-2 pt-3"
+                >
+                  <Shield className="w-4 h-4" />
+                  Panel Admin
+                </button>
+              )}
             </div>
 
             {/* Cerrar sesión */}
