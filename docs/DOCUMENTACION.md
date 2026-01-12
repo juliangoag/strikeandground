@@ -85,12 +85,12 @@ Deploy:
 
 ### Estructura de Archivos Completa
 
-**NOTA:** Reestructurada el 7 de enero de 2026 siguiendo convenciones de Next.js App Router
+**NOTA:** Reestructurada el 7 de enero de 2026 siguiendo convenciones modernas. Carpeta renombrada de `src/` a `src/` el 12 de enero de 2026.
 
 ```
 project/
 │
-├── 📂 app/                           # Código fuente de la aplicación
+├── 📂 src/                           # Código fuente de la aplicación
 │   │
 │   ├── 📂 components/                # Componentes organizados por feature
 │   │   ├── 📂 layout/                # Componentes de layout
@@ -169,7 +169,7 @@ project/
 │   ├── README.md                     # Guía de inicio rápido
 │   ├── DOCUMENTACION.md              # Documentación técnica completa (este archivo)
 │   ├── CHANGELOG.md                  # Historial de cambios
-│   └── Milestone-1.md                # Plan de implementación Checkout
+│   └── Milestone-3.md                # Plan de Panel Admin (en progreso)
 │
 ├── 📂 public/                        # Assets estáticos
 │
@@ -253,16 +253,16 @@ interface Session {
 |-----------|--------|---------------------|
 | README.md (raíz) | ~150 | Dic 19, 2025 |
 | README.md (doc) | ~220 | Dic 19, 2025 |
-| DOCUMENTACION.md | ~2,600 | Dic 19, 2025 |
-| CHANGELOG.md | ~900 | Dic 19, 2025 |
-| Milestone-1.md | ~500 | Dic 19, 2025 |
-| **Total** | **~4,370** | - |
+| DOCUMENTACION.md | ~4,100 | Ene 12, 2026 |
+| CHANGELOG.md | ~1,900 | Ene 12, 2026 |
+| Milestone-3.md | ~480 | Ene 9, 2026 |
+| **Total** | **~6,850** | - |
 
 ### Organización por Funcionalidad
 
 #### 🔐 Autenticación
 ```
-app/auth/
+src/auth/
 ├── components/    → UI de autenticación
 ├── context/       → Estado global (AuthContext)
 ├── services/      → Lógica de negocio (mockAuthService)
@@ -271,13 +271,13 @@ app/auth/
 
 #### 🛒 Carrito y Checkout
 ```
-app/context/
+src/context/
 └── CartContext.tsx    → Estado del carrito
 
-app/services/
+src/services/
 └── mockCheckoutService.ts    → Lógica de órdenes
 
-app/components/
+src/components/
 ├── OrderSummary.tsx          → Resumen de compra
 ├── PaymentMethodSelector.tsx → Selector de pago
 ├── PromoCodeInput.tsx        → Códigos promocionales
@@ -286,7 +286,7 @@ app/components/
 
 #### 🎨 UI Global
 ```
-app/components/
+src/components/
 ├── Header.tsx           → Navegación principal (refactorizado)
 ├── header/
 │   ├── NavLinks.tsx     → Enlaces de navegación
@@ -308,7 +308,7 @@ app/components/
 
 **Públicas:**
 ```
-app/pages/
+src/pages/
 ├── HomePage.tsx           → Landing page (/)
 ├── EventsPage.tsx         → Catálogo (/eventos)
 ├── EventDetailsPage.tsx   → Detalles (/eventos/:id/details)
@@ -317,7 +317,7 @@ app/pages/
 
 **Protegidas (requieren autenticación):**
 ```
-app/pages/(protected)/
+src/pages/(protected)/
 ├── ProfilePage.tsx        → Perfil (/profile)
 └── SettingsPage.tsx       → Configuración (/profile/settings)
 ```
@@ -1260,7 +1260,7 @@ to={`/eventos/${relatedEvent.id}/details`}
 
 ### Cómo Agregar un Evento
 
-**Editar:** `app/data/events.ts`
+**Editar:** `src/data/events.ts`
 
 ```typescript
 export const upcomingEvents: FightEvent[] = [
@@ -1330,7 +1330,7 @@ export function Header() {
 
 #### NavLinks.tsx
 
-**Ubicación:** `app/components/header/NavLinks.tsx`
+**Ubicación:** `src/components/header/NavLinks.tsx`
 
 **Funcionalidad:** Maneja la navegación principal del sitio.
 
@@ -1352,7 +1352,7 @@ const NAV_ITEMS = [
 
 #### AuthButtons.tsx
 
-**Ubicación:** `app/components/header/AuthButtons.tsx`
+**Ubicación:** `src/components/header/AuthButtons.tsx`
 
 **Funcionalidad:** Botones de login y registro para usuarios no autenticados.
 
@@ -1370,7 +1370,7 @@ interface AuthButtonsProps {
 
 #### UserMenu.tsx
 
-**Ubicación:** `app/components/header/UserMenu.tsx`
+**Ubicación:** `src/components/header/UserMenu.tsx`
 
 **Funcionalidad:** Menú desplegable para usuarios autenticados.
 
@@ -1402,7 +1402,7 @@ const MENU_ITEMS = [
 
 #### CartDropdown.tsx
 
-**Ubicación:** `app/components/header/CartDropdown.tsx`
+**Ubicación:** `src/components/header/CartDropdown.tsx`
 
 **Funcionalidad:** Dropdown completo del carrito de compras.
 
@@ -1433,7 +1433,7 @@ const { items, itemCount, subtotal, removeItem } = useCart();
 
 #### Overlay.tsx (Componente Reutilizable)
 
-**Ubicación:** `app/components/ui/Overlay.tsx`
+**Ubicación:** `src/components/ui/Overlay.tsx`
 
 **Funcionalidad:** Overlay transparente para cerrar dropdowns/modales al hacer clic fuera.
 
@@ -1729,7 +1729,7 @@ El módulo de checkout implementa un sistema completo de carrito de compras y pr
 
 ### CartContext
 
-**Ubicación:** `app/context/CartContext.tsx`
+**Ubicación:** `src/context/CartContext.tsx`
 
 **Funcionalidad:** Context global que gestiona el estado del carrito de compras con persistencia en localStorage.
 
@@ -1779,7 +1779,7 @@ function MyComponent() {
 
 ### mockCheckoutService
 
-**Ubicación:** `app/services/mockCheckoutService.ts`
+**Ubicación:** `src/services/mockCheckoutService.ts`
 
 **Funcionalidad:** Servicio MOCK para gestionar órdenes y simular procesamiento de pagos.
 
@@ -1842,7 +1842,7 @@ const promoCode = mockCheckoutService.validatePromoCode('PROMO10');
 
 ### CheckoutPage
 
-**Ubicación:** `app/pages/CheckoutPage.tsx`  
+**Ubicación:** `src/pages/CheckoutPage.tsx`  
 **Ruta:** `/checkout`
 
 **Funcionalidad:** Página principal de checkout con wizard de 3 pasos.
@@ -1964,7 +1964,7 @@ Sin este guardado previo, el `total` calculado dinámicamente se volvería 0 al 
 
 #### OrderSummary
 
-**Ubicación:** `app/components/OrderSummary.tsx`
+**Ubicación:** `src/components/OrderSummary.tsx`
 
 **Props:**
 ```typescript
@@ -1986,7 +1986,7 @@ Sin este guardado previo, el `total` calculado dinámicamente se volvería 0 al 
 
 #### ShippingForm
 
-**Ubicación:** `app/components/ShippingForm.tsx`
+**Ubicación:** `src/components/ShippingForm.tsx`
 
 **Props:**
 ```typescript
@@ -2004,7 +2004,7 @@ Sin este guardado previo, el `total` calculado dinámicamente se volvería 0 al 
 
 #### PaymentMethodSelector
 
-**Ubicación:** `app/components/PaymentMethodSelector.tsx`
+**Ubicación:** `src/components/PaymentMethodSelector.tsx`
 
 **Props:**
 ```typescript
@@ -2063,7 +2063,7 @@ validateCVV(cvv: string): boolean
 
 #### PromoCodeInput
 
-**Ubicación:** `app/components/PromoCodeInput.tsx`
+**Ubicación:** `src/components/PromoCodeInput.tsx`
 
 **Props:**
 ```typescript
@@ -2124,7 +2124,7 @@ validateCVV(cvv: string): boolean
 
 ### Tipos TypeScript
 
-**Ubicación:** `app/types/checkout.ts`
+**Ubicación:** `src/types/checkout.ts`
 
 ```typescript
 // Tipo de entrada
@@ -2181,7 +2181,7 @@ export interface PromoCode {
 
 ### Datos MOCK
 
-**Ubicación:** `app/data/checkout-mocks.ts`
+**Ubicación:** `src/data/checkout-mocks.ts`
 
 ```typescript
 // Métodos de pago disponibles
@@ -2356,7 +2356,7 @@ interface User {
 
 #### AdminRoute Component
 
-**Ubicación:** `app/lib/auth/components/AdminRoute.tsx`
+**Ubicación:** `src/lib/auth/components/AdminRoute.tsx`
 
 **Funcionalidad:** HOC (Higher-Order Component) que protege rutas administrativas verificando que el usuario esté autenticado Y tenga rol de administrador.
 
@@ -2403,7 +2403,7 @@ function MyComponent() {
 
 ### AdminDashboard
 
-**Ubicación:** `app/pages/(protected)/admin/AdminDashboard.tsx`  
+**Ubicación:** `src/pages/(protected)/admin/AdminDashboard.tsx`  
 **Ruta:** `/admin`
 
 #### Características
@@ -2448,7 +2448,7 @@ Cards clicables para:
 
 #### Componente StatCard
 
-**Ubicación:** `app/components/admin/StatCard.tsx`
+**Ubicación:** `src/components/admin/StatCard.tsx`
 
 ```typescript
 interface StatCardProps {
@@ -2470,7 +2470,7 @@ interface StatCardProps {
 
 ### AdminUsersPage
 
-**Ubicación:** `app/pages/(protected)/admin/AdminUsersPage.tsx`  
+**Ubicación:** `src/pages/(protected)/admin/AdminUsersPage.tsx`  
 **Ruta:** `/admin/users`
 
 #### Características
@@ -2549,7 +2549,7 @@ Cada fila muestra:
 
 ### AdminEventsPage
 
-**Ubicación:** `app/pages/(protected)/admin/AdminEventsPage.tsx`  
+**Ubicación:** `src/pages/(protected)/admin/AdminEventsPage.tsx`  
 **Ruta:** `/admin/events`
 
 #### Características
@@ -2628,7 +2628,7 @@ Cada evento tiene un botón con icono de ojo que abre el evento en nueva pestañ
 
 ### AdminLayout
 
-**Ubicación:** `app/components/admin/AdminLayout.tsx`
+**Ubicación:** `src/components/admin/AdminLayout.tsx`
 
 Layout wrapper para todas las páginas administrativas.
 
@@ -2674,7 +2674,7 @@ interface AdminLayoutProps {
 
 ### AdminSidebar
 
-**Ubicación:** `app/components/admin/AdminSidebar.tsx`
+**Ubicación:** `src/components/admin/AdminSidebar.tsx`
 
 #### Características
 
@@ -2715,7 +2715,7 @@ Botón fijo en la parte inferior para volver al sitio principal:
 
 ### mockAdminService
 
-**Ubicación:** `app/lib/admin/services/mockAdminService.ts`
+**Ubicación:** `src/lib/admin/services/mockAdminService.ts`
 
 Servicio MOCK para operaciones administrativas.
 
@@ -2810,7 +2810,7 @@ limit: number = 10  // Cantidad de órdenes a retornar
 
 ### Tipos Admin
 
-**Ubicación:** `app/lib/admin/types.ts`
+**Ubicación:** `src/lib/admin/types.ts`
 
 ```typescript
 // Estadísticas del dashboard
@@ -2893,7 +2893,7 @@ Si un usuario normal intenta acceder, será redirigido a `/`.
 
 ### Mejora del Login para Testing
 
-**Ubicación:** `app/lib/auth/components/LoginForm.tsx`
+**Ubicación:** `src/lib/auth/components/LoginForm.tsx`
 
 Se agregaron botones de acceso rápido para facilitar el testing:
 
@@ -3128,7 +3128,7 @@ export function MyComponent({ }: MyComponentProps) {
 
 1. **Crear el componente:**
 ```typescript
-// app/pages/NewPage.tsx (o app/pages/(protected)/NewPage.tsx si requiere autenticación)
+// src/pages/NewPage.tsx (o src/pages/(protected)/NewPage.tsx si requiere autenticación)
 export function NewPage() {
   return (
     <div className="min-h-screen bg-black text-white pt-20">
@@ -3140,7 +3140,7 @@ export function NewPage() {
 
 **Nota:** 
 - Siempre agregar `pt-20` para compensar el header fixed.
-- Si la página requiere autenticación, créala en `app/pages/(protected)/` en lugar de `app/pages/`
+- Si la página requiere autenticación, créala en `src/pages/(protected)/` en lugar de `src/pages/`
 
 2. **Agregar la ruta en App.tsx:**
 ```typescript
@@ -3439,7 +3439,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 4. **Crear realAuthService.ts:**
 ```typescript
-// app/auth/services/realAuthService.ts
+// src/auth/services/realAuthService.ts
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -3530,7 +3530,7 @@ npm install firebase
 ```
 
 ```typescript
-// app/auth/services/firebaseAuthService.ts
+// src/auth/services/firebaseAuthService.ts
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -3822,7 +3822,7 @@ Verificar que esté implementado correctamente.
 
 **Causa 1:** Tailwind no configurado
 
-**Solución:** Verificar `app/index.css`:
+**Solución:** Verificar `src/index.css`:
 ```css
 @tailwind base;
 @tailwind components;
@@ -3944,9 +3944,9 @@ interface User {
 
 #### ¿Cómo agrego más campos al perfil?
 
-1. Actualizar tipo `User` en `app/auth/types/auth.types.ts`
-2. Actualizar `app/auth/services/mockAuthService.ts` en el método `register()`
-3. Actualizar `app/pages/(protected)/ProfilePage.tsx`
+1. Actualizar tipo `User` en `src/auth/types/auth.types.ts`
+2. Actualizar `src/auth/services/mockAuthService.ts` en el método `register()`
+3. Actualizar `src/pages/(protected)/ProfilePage.tsx`
 
 #### ¿Puedo cambiar el avatar automático?
 
@@ -3968,12 +3968,12 @@ className="bg-red-600" // Cambiar a bg-blue-600, etc.
 
 #### ¿Cómo agrego una nueva categoría de evento?
 
-1. **Actualizar tipo** en `app/types/event.ts`:
+1. **Actualizar tipo** en `src/types/event.ts`:
 ```typescript
 category: 'MMA' | 'BOXEO' | '...' | 'NUEVA_CATEGORIA';
 ```
 
-2. **Actualizar labels** en `app/components/EventCard.tsx`:
+2. **Actualizar labels** en `src/components/EventCard.tsx`:
 ```typescript
 const categoryLabels = {
   // ...
@@ -4080,9 +4080,10 @@ Para más información o ayuda específica, consulta las secciones relevantes de
 
 ---
 
-**Versión**: 1.9.0 (MOCK)  
-**Última actualización**: Enero 9, 2026  
-**Estado**: ✅ Sistema MOCK completo con Panel de Administración (Dashboard + Usuarios + Eventos)
+**Versión**: 1.9.1 (MOCK)  
+**Última actualización**: Enero 12, 2026  
+**Estado**: ✅ Sistema MOCK completo con Panel de Administración (Dashboard + Usuarios + Eventos)  
+**Estructura**: Carpeta principal `src/` (renombrada desde `app/` para convenciones estándar)
 
 ---
 
